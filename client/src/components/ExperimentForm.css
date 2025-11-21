@@ -1,0 +1,51 @@
+.experiment_form_all
+{
+    display: flex;
+    flex-direction: column;
+    width: 90vw;
+}
+
+.experiment_form
+{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.experiment_form button
+{
+    display: flex;
+    flex-direction: column;
+    width: 30vw;
+    justify-content: center;
+    margin: 0 auto;
+}
+
+.experiment_form_desc
+{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.experiment_form_desc input
+{
+    width: 110px;
+}
+.experiment_form_desc textarea
+{
+    display: flex;
+    justify-content: center;
+    height: 10vh;
+    width: 40vw;
+}
+
+.experiment_form_reagents
+{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    gap: 5px;
+}

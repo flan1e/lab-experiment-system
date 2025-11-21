@@ -1,0 +1,15 @@
+.navbar
+{
+    
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    text-align: center;
+    justify-content: space-between;
+    height: 15vh;
+}
+.navbar_user
+{
+    display: flex;
+    flex-direction: column;
+}

@@ -1,0 +1,29 @@
+#root
+{
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    /* border: 1px solid white;
+    border-radius: 5px;
+    width: 35vw;
+    height: 30vh; */
+    text-align: center;
+}
+
+.login_inputs
+{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    align-items: center;
+}
+
+.login_inputs button
+{
+    margin-top: 10px;
+}
+
+.login_inputs ::placeholder
+{
+    text-align: center;
+}
