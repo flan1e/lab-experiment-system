@@ -2,14 +2,14 @@ import React, {useState} from 'react';
 import apiCall from '../utils/api';
 import './ExperimentForm.css'
 
-const ExperimentForm = () => {
+const ExperimentForm = ({ onExperimentAdded }) => {
     const [date, setDate] = useState('');
     const [desc, setDesc] = useState('');
     const [obs, setObs] = useState('');
-    const [reagents, setReagents] = useState([{reagent_id: '', amount: '', unit: 'г'}]);
+    const [reagents, setReagents] = useState([{ reagent_id: '', amount: '', unit: 'г' }]);
 
     const addReagent = () => {
-        setReagents([...reagents, {reagent_id: '', amount: '', unit: 'г'}]);
+        setReagents([...reagents, { reagent_id: '', amount: '', unit: 'г' }]);
     };
 
     const updateReagent = (index, field, value) => {
@@ -34,9 +34,18 @@ const ExperimentForm = () => {
                     }))
                 })
             });
-            alert ('Эксперимент добавлен');
+            alert('Эксперимент добавлен');
+
+            setDate('');
+            setDesc('');
+            setObs('');
+            setReagents([{ reagent_id: '', amount: '', unit: 'г' }]);
+
+            if (onExperimentAdded) {
+                onExperimentAdded();
+            }
         } catch (err) {
-            alert ('Ошибка: ' + err.message);
+            alert('Ошибка: ' + err.message);
         }
     };
 

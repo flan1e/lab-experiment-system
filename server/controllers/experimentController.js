@@ -28,8 +28,6 @@ exports.addExperiment = async (req, res) => {
             return res.status(400).json({ msg: 'amount должен быть числом' });
         }
 
-        // ✅ PostgreSQL не позволяет использовать $1 в SET LOCAL
-        // ✅ Но user_id — строго проверенное число → безопасно
         await db.query(`SET LOCAL app.current_user_id = ${user_id}`);
 
         const result = await db.query(
@@ -37,10 +35,10 @@ exports.addExperiment = async (req, res) => {
             [user_id, date_conducted, description, observations, reagent_ids, amounts, units]
         );
 
-        res.json({ msg: '✅ Эксперимент добавлен', id: result.rows[0].experiment_id });
+        res.json({ msg: ' Эксперимент добавлен', id: result.rows[0].experiment_id });
     } catch (err) {
         console.error('Ошибка в addExperiment:', err.message);
-        res.status(500).json({ msg: '❌ Ошибка сервера', error: err.message });
+        res.status(500).json({ msg: ' Ошибка сервера', error: err.message });
     }
 };
 
@@ -53,7 +51,7 @@ exports.getExperiments = async (req, res) => {
         );
         res.json(result.rows);
     } catch (err) {
-        res.status(500).json({ msg: '❌ Ошибка сервера', error: err.message });
+        res.status(500).json({ msg: ' Ошибка сервера', error: err.message });
     }
 };
 
@@ -84,9 +82,9 @@ exports.updateExperiment = async (req, res) => {
             'SELECT update_experiment($1, $2, $3, $4, $5, $6, $7, $8)',
             [user_id, id, date_conducted, description, observations, reagent_ids, amounts, units]
         );
-        res.json({ msg: '✅ Эксперимент обновлён' });
+        res.json({ msg: ' Эксперимент обновлён' });
     } catch (err) {
-        res.status(500).json({ msg: '❌ Ошибка сервера', error: err.message });
+        res.status(500).json({ msg: ' Ошибка сервера', error: err.message });
     }
 };
 
@@ -101,8 +99,8 @@ exports.deleteExperiment = async (req, res) => {
 
         await db.query(`SET LOCAL app.current_user_id = ${user_id}`);
         await db.query('SELECT delete_experiment($1, $2)', [user_id, id]);
-        res.json({ msg: '✅ Эксперимент удалён' });
+        res.json({ msg: ' Эксперимент удалён' });
     } catch (err) {
-        res.status(500).json({ msg: '❌ Ошибка сервера', error: err.message });
+        res.status(500).json({ msg: ' Ошибка сервера', error: err.message });
     }
 };

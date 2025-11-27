@@ -1,25 +1,30 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import apiCall from '../utils/api';
-import { useEffect } from 'react';
 import './ExperimentList.css'
 
-const ExperimentList = () => {
+const ExperimentList = ({ onRefresh }) => {
     const [experiments, setExperiments] = useState([]);
     const [loading, setLoading] = useState(true);
 
+    const fetchExperiments = async () => {
+        setLoading(true);
+        try {
+            const data = await apiCall('/experiments');
+            setExperiments(data);
+        } catch (err) {
+            alert('Ошибка загрузки экспериментов');
+        } finally {
+            setLoading(false);
+        }
+    };
+
     useEffect(() => {
-        const fetchExperiments = async () => {
-            try {
-                const data = await apiCall('/experiments');
-                setExperiments(data);
-            } catch (err) {
-                alert('Ошибка загрузки экспериментов');
-            } finally {
-                setLoading(false);
-            }
-        };
         fetchExperiments();
     }, []);
+
+    if (onRefresh) {
+        onRefresh.current = fetchExperiments;
+    }
 
     if (loading) return <p>Загрузка...</p>;
 
