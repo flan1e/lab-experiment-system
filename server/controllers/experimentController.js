@@ -1,33 +1,4 @@
-// const pool = require('../config/pool');
-require('dotenv').config();
-
-const { Pool } = require('pg');
-
-const pool = new Pool({
-    user: process.env.DB_USER,
-    host: process.env.DB_HOST,
-    database: process.env.DB_NAME,
-    password: process.env.DB_PASSWORD,
-    port: process.env.DB_PORT,
-    client_encoding: 'UTF8',
-});
-
-pool.connect((err, client, release) => {
-    if (err) {
-        console.error('Ошибка подключения к PostgreSQL:', err.message);
-        console.error('Детали:', err);
-    } else {
-        console.log('Успешно подключено к PostgreSQL');
-        client.query('SELECT NOW()', (err, res) => {
-            if (err) {
-                console.error('Ошибка выполнения запроса:', err.message);
-            } else {
-                console.log('Текущее время:', res.rows[0].now);
-            }
-            release();
-        });
-    }
-});
+const db = require('../config/db');
 
 exports.addExperiment = async (req, res) => {
     const { date_conducted, description, observations, reagents } = req.body;
@@ -39,19 +10,17 @@ exports.addExperiment = async (req, res) => {
 
     try {
         if (isNaN(user_id) || user_id <= 0) {
-            return res.status(400).json({ msg: 'Некорректный user_id' });
+            return res.status(401).json({ msg: 'Недопустимый или отсутствующий user_id' });
         }
 
         if (!Array.isArray(reagents) || reagents.length === 0) {
             return res.status(400).json({ msg: 'reagents должен быть непустым массивом' });
         }
 
-        // Приводим к нужным типам
         const reagent_ids = reagents.map(r => parseInt(r.reagent_id, 10));
         const amounts = reagents.map(r => parseFloat(r.amount));
         const units = reagents.map(r => r.unit.trim());
 
-        // Проверяем, что все числа
         if (reagent_ids.some(id => isNaN(id))) {
             return res.status(400).json({ msg: 'reagent_id должен быть числом' });
         }
@@ -59,17 +28,14 @@ exports.addExperiment = async (req, res) => {
             return res.status(400).json({ msg: 'amount должен быть числом' });
         }
 
-        console.log('Выполняю SET LOCAL...');
-        await pool.query('SET LOCAL app.current_user_id = $1', [user_id]);
-        console.log('SET LOCAL успешно выполнен');
+        // ✅ PostgreSQL не позволяет использовать $1 в SET LOCAL
+        // ✅ Но user_id — строго проверенное число → безопасно
+        await db.query(`SET LOCAL app.current_user_id = ${user_id}`);
 
-        const result = await pool.query(
+        const result = await db.query(
             'SELECT add_experiment($1, $2, $3, $4, $5, $6, $7) AS experiment_id',
             [user_id, date_conducted, description, observations, reagent_ids, amounts, units]
-                // 'SELECT add_experiment($1, $2, $3, $4, $5, $6, $7) AS experiment_id',
-                // [1, '2025-11-21', 'description', 'observations', [1,2], [2,2], ['г','г']]
         );
-
 
         res.json({ msg: '✅ Эксперимент добавлен', id: result.rows[0].experiment_id });
     } catch (err) {
@@ -81,7 +47,7 @@ exports.addExperiment = async (req, res) => {
 exports.getExperiments = async (req, res) => {
     const { user_id, date_from, date_to, reagent_id } = req.query;
     try {
-        const result = await pool.query(
+        const result = await db.query(
             'SELECT * FROM get_experiments($1, $2, $3, $4)',
             [user_id || null, date_from || null, date_to || null, reagent_id || null]
         );
@@ -101,7 +67,7 @@ exports.updateExperiment = async (req, res) => {
             return res.status(400).json({ msg: 'Некорректный user_id' });
         }
 
-        await pool.query('SET LOCAL app.current_user_id = $1', [user_id]);
+        await db.query(`SET LOCAL app.current_user_id = ${user_id}`);
 
         const reagent_ids = reagents.map(r => parseInt(r.reagent_id, 10));
         const amounts = reagents.map(r => parseFloat(r.amount));
@@ -114,7 +80,7 @@ exports.updateExperiment = async (req, res) => {
             return res.status(400).json({ msg: 'amount должен быть числом' });
         }
 
-        await pool.query(
+        await db.query(
             'SELECT update_experiment($1, $2, $3, $4, $5, $6, $7, $8)',
             [user_id, id, date_conducted, description, observations, reagent_ids, amounts, units]
         );
@@ -133,8 +99,8 @@ exports.deleteExperiment = async (req, res) => {
             return res.status(400).json({ msg: 'Некорректный user_id' });
         }
 
-        await pool.query('SET LOCAL app.current_user_id = $1', [user_id]);
-        await pool.query('SELECT delete_experiment($1, $2)', [user_id, id]);
+        await db.query(`SET LOCAL app.current_user_id = ${user_id}`);
+        await db.query('SELECT delete_experiment($1, $2)', [user_id, id]);
         res.json({ msg: '✅ Эксперимент удалён' });
     } catch (err) {
         res.status(500).json({ msg: '❌ Ошибка сервера', error: err.message });
