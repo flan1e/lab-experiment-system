@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import apiCall from '../utils/api';
-import '../components/ExperimentDetail.css'
+import '../components/ExperimentDetail.css';
 
 const ExperimentDetail = ({ user }) => {
     const { id } = useParams();
@@ -49,6 +49,11 @@ const ExperimentDetail = ({ user }) => {
     if (loading) return <p>Загрузка...</p>;
     if (error) return <p style={{ color: 'red' }}>{error}</p>;
 
+    const canEditOrDelete = 
+        user.role === 'admin' || 
+        user.role === 'teacher' || 
+        (user.role === 'student' && experiment && experiment.user_id == user.id);
+
     return (
         <div className='experimentDetail'>
             <h1>Эксперимент #{experiment.experiment_id}</h1>
@@ -77,8 +82,12 @@ const ExperimentDetail = ({ user }) => {
 
             <div className='buttons_panel'>
                 <button onClick={() => navigate('/')}>← Назад </button>
-                <button onClick={handleEdit}>🖊️ Редактировать эксперимент</button>
-                <button onClick={handleDelete} className='buttons_panel_delete'>🗑️ Удалить</button>
+                {canEditOrDelete && (
+                    <button onClick={handleEdit}>🖊️ Редактировать эксперимент</button>
+                )}
+                {canEditOrDelete && (
+                    <button onClick={handleDelete} className='buttons_panel_delete'>🗑️ Удалить</button>
+                )}
             </div>
         </div>
     );

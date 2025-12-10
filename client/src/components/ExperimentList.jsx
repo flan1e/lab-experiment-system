@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import apiCall from '../utils/api';
-import '../components/experimentList.css'
+import '../components/experimentList.css';
 
-const ExperimentList = ({ onRefresh }) => {
+const ExperimentList = ({ onRefresh, user }) => {
     const [experiments, setExperiments] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    // Фильтры
     const [filters, setFilters] = useState({
         user_id: '',
         date_from: '',
@@ -64,11 +63,9 @@ const ExperimentList = ({ onRefresh }) => {
     if (loading) return <p>Загрузка...</p>;
 
     return (
-        <div>
+        <div className='experimentList_all'>
             <h2>Список экспериментов</h2>
-
-            {/* Форма фильтрации */}
-            <form className='experimentList_validation_form' onSubmit={handleFilterSubmit} style={{ marginBottom: '20px', padding: '15px', borderRadius: '8px' }}>
+            <form className='experimentList_validation_form' onSubmit={handleFilterSubmit}>
                 <h3>Фильтрация</h3>
                 <div style={{ display: 'flex', gap: '15px', flexWrap: 'wrap', alignItems: 'center' }}>
                     <div>
@@ -133,15 +130,26 @@ const ExperimentList = ({ onRefresh }) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {experiments.map(exp => (
-                        <tr key={exp.experiment_id} onClick={() => window.location.href = `/experiment/${exp.experiment_id}`}>
-                            <td className='experiment_id'>{exp.experiment_id}</td>
-                            <td>{exp.date_conducted}</td>
-                            <td>{exp.description}</td>
-                            <td>{exp.observations}</td> 
-                            <td className='experiment_name'>{exp.user_full_name}</td>
-                        </tr>
-                    ))}
+                    {experiments.map(exp => {
+                        // if (!user) return null;
+                        const canView = user.role === 'student' ? (exp.user_id == user.id) : true;
+                        return (
+                            <tr 
+                                key={exp.experiment_id} 
+                                onClick={() => canView && (window.location.href = `/experiment/${exp.experiment_id}`)}
+                                style={{ 
+                                    cursor: canView ? 'pointer' : 'not-allowed',
+                                    opacity: canView ? 1 : 0.5 
+                                }}
+                            >
+                                <td className='experiment_id'>{exp.experiment_id}</td>
+                                <td>{exp.date_conducted}</td>
+                                <td>{exp.description}</td>
+                                <td>{exp.observations}</td> 
+                                <td className='experiment_name'>{exp.user_full_name}</td>
+                            </tr>
+                        );
+                    })}
                 </tbody>
             </table>
 

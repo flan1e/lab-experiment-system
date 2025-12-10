@@ -1,9 +1,10 @@
+// src/pages/Dashboard.jsx
 import React, { useRef } from 'react';
 import { Link } from 'react-router-dom';
 import ExperimentList from '../components/ExperimentList';
 import ExperimentForm from '../components/ExperimentForm';
 
-const Dashboard = ({ user }) => {
+const Dashboard = ({ user }) => { // ← получает user от App
     const refreshListRef = useRef();
 
     return (
@@ -15,7 +16,10 @@ const Dashboard = ({ user }) => {
                     if (refreshListRef.current) refreshListRef.current();
                 }} 
             />
-            <ExperimentList onRefresh={refreshListRef} />
+            <ExperimentList 
+                onRefresh={refreshListRef} 
+                user={user} // ← ✅ Передаём user
+            />
         </div>
     );
 };

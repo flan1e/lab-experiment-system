@@ -12,7 +12,9 @@ exports.login = async (req, res) => {
         const isMatch = await bcrypt.compare(password, user.password_hash);
         if (!isMatch) return res.status(400).json({ msg: 'Неверный логин или пароль' });
 
-        const token = jwt.sign({ user: { id: user.user_id, role: user.role } }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        const token = jwt.sign(
+            { user: { id: user.user_id, username: user.username,role: user.role } }, process.env.JWT_SECRET, { expiresIn: '1h' }
+        );
         res.json({ 
             token, 
             user: { 

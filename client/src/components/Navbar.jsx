@@ -7,9 +7,12 @@ const Navbar = ({ user, onLogout }) => {
             <div>
                 <h3>Лабораторный журнал</h3>
             </div>
-            <div className='navbar_user'> 
+            <div className='navbar_user'>
                 <span>Пользователь: {user.username} ({user.role})</span>
                 <button onClick={onLogout}>Выйти</button>
+                {user.role === 'teacher' || user.role === 'admin' ? (
+                    <a href="/users">Управление пользователями</a>
+                ) : null}
             </div>
         </nav>
     );

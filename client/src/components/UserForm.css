@@ -1,0 +1,22 @@
+.add_user
+{
+    display: flex;
+    flex-direction: column;
+}
+
+.add_user_form
+{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.add_user_option
+{
+    width: 250px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    justify-content: space-between;
+}

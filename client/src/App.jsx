@@ -5,6 +5,8 @@ import Navbar from './components/Navbar';
 import Dashboard from './components/Dashboard';
 import ExperimentDetail from './components/ExperimentDetail';
 import ExperimentEdit from './components/ExperimentEdit';
+import UsersPage from './pages/UsersPage';
+import './App.css'
 
 function App() {
     const [user, setUser] = useState(null);
@@ -12,7 +14,13 @@ function App() {
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (token) {
-            setUser({ id: 1, username: 'ivanov', role: 'student' });
+            try {
+                const payload = JSON.parse(atob(token.split('.')[1]));
+                setUser(payload.user);
+            } catch (err) {
+                console.error('Не удалось расшифровать токен', err);
+                localStorage.removeItem('token');
+            }
         }
     }, []);
 
@@ -31,12 +39,13 @@ function App() {
 
     return (
         <Router>
-            <div>
-                <Navbar user={user} onLogout={handleLogout} />
+            <div className='app'>
+                <Navbar user={user} onLogout={handleLogout} className='app_navbar' />
                 <Routes>
                     <Route path="/" element={<Dashboard user={user} />} />
                     <Route path="/experiment/:id" element={<ExperimentDetail user={user} />} />
                     <Route path="/experiment/:id/edit" element={<ExperimentEdit user={user} />} />
+                    <Route path="/users" element={<UsersPage user={user} />} />
                 </Routes>
             </div>
         </Router>
