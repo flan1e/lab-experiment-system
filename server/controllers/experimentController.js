@@ -4,9 +4,10 @@ exports.addExperiment = async (req, res) => {
     const { date_conducted, description, observations, reagents } = req.body;
     const user_id = parseInt(req.user.id, 10);
 
-    console.log('req.user:', req.user);
-    console.log('req.user.id:', req.user?.id);
-    console.log('user_id (parsed):', user_id);
+    // console.log('req.user:', req.user);
+    // console.log('req.user.id:', req.user?.id);
+    // console.log('user_id (parsed):', user_id);
+
 
     try {
         if (isNaN(user_id) || user_id <= 0) {
@@ -35,23 +36,46 @@ exports.addExperiment = async (req, res) => {
             [user_id, date_conducted, description, observations, reagent_ids, amounts, units]
         );
 
-        res.json({ msg: ' Эксперимент добавлен', id: result.rows[0].experiment_id });
+        res.json({ msg: 'Эксперимент добавлен', id: result.rows[0].experiment_id });
     } catch (err) {
         console.error('Ошибка в addExperiment:', err.message);
-        res.status(500).json({ msg: ' Ошибка сервера', error: err.message });
+        res.status(500).json({ msg: 'Ошибка сервера', error: err.message });
     }
 };
 
 exports.getExperiments = async (req, res) => {
     const { user_id, date_from, date_to, reagent_id } = req.query;
+    
     try {
         const result = await db.query(
-            'SELECT * FROM get_experiments($1, $2, $3, $4)',
+            'SELECT * FROM get_experiments($1, $2, $3, $4) ORDER BY experiment_id DESC',
             [user_id || null, date_from || null, date_to || null, reagent_id || null]
         );
         res.json(result.rows);
     } catch (err) {
-        res.status(500).json({ msg: ' Ошибка сервера', error: err.message });
+        res.status(500).json({ msg: 'Ошибка сервера', error: err.message });
+    }
+};
+
+exports.getExperimentById = async (req, res) => {
+    const { id } = req.params;
+    const experimentId = parseInt(id, 10);
+
+    if (isNaN(experimentId)) {
+        return res.status(400).json({ msg: 'Неверный ID эксперимента' });
+    }
+
+    try {
+        const result = await db.query(
+            'SELECT * FROM get_experiment_by_id($1)',
+            [experimentId]
+        );
+        if (result.rows.length === 0) {
+            return res.status(404).json({ msg: 'Эксперимент не найден' });
+        }
+        res.json(result.rows);
+    } catch (err) {
+        res.status(500).json({ msg: '❌ Ошибка сервера', error: err.message });
     }
 };
 
@@ -99,8 +123,8 @@ exports.deleteExperiment = async (req, res) => {
 
         await db.query(`SET LOCAL app.current_user_id = ${user_id}`);
         await db.query('SELECT delete_experiment($1, $2)', [user_id, id]);
-        res.json({ msg: ' Эксперимент удалён' });
+        res.json({ msg: 'Эксперимент удалён' });
     } catch (err) {
-        res.status(500).json({ msg: ' Ошибка сервера', error: err.message });
+        res.status(500).json({ msg: 'Ошибка сервера', error: err.message });
     }
 };

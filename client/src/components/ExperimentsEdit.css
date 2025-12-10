@@ -1,0 +1,46 @@
+.edit_form
+{
+    width: 90vw;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.edit_form_date
+{
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    margin: 0 auto;
+}
+
+.edit_form_desc, .edit_form_obs
+{
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    gap: 5px;
+}
+.edit_form_desc textarea, .edit_form_obs textarea
+{
+    resize: vertical;
+    height: 10vh;
+}
+
+.edit_form_reagents
+{
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    margin: 0 auto;
+}
+
+.edit_form_buttons
+{
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    margin: 20px auto;
+}

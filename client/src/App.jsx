@@ -1,12 +1,13 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './components/Login';
-import ExperimentList from './components/ExperimentList';
-import ExperimentForm from './components/ExperimentForm';
 import Navbar from './components/Navbar';
+import Dashboard from './components/Dashboard';
+import ExperimentDetail from './components/ExperimentDetail';
+import ExperimentEdit from './components/ExperimentEdit';
 
 function App() {
     const [user, setUser] = useState(null);
-    const refreshListRef = useRef();
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -29,15 +30,16 @@ function App() {
     }
 
     return (
-        <div>
-            <Navbar user={user} onLogout={handleLogout} />
-            <ExperimentForm onExperimentAdded={() => {
-                if (refreshListRef.current) {
-                    refreshListRef.current();
-                }
-            }}/>
-            <ExperimentList onRefresh={refreshListRef}/>
-        </div>
+        <Router>
+            <div>
+                <Navbar user={user} onLogout={handleLogout} />
+                <Routes>
+                    <Route path="/" element={<Dashboard user={user} />} />
+                    <Route path="/experiment/:id" element={<ExperimentDetail user={user} />} />
+                    <Route path="/experiment/:id/edit" element={<ExperimentEdit user={user} />} />
+                </Routes>
+            </div>
+        </Router>
     );
 }
 

@@ -2,37 +2,55 @@
 {
     width: 95vw;
 }
+
+.experimentList_validation_form
+{
+    border: 1px solid gray;
+}
+
 .experimentList_table
 {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid gray;
+}
 
-}
-.experimentList_tr
+.experimentList_table th, td
 {
-    display: flex;
-    width: 90vw;
-    flex-direction: row;
-    justify-content: space-evenly;
+    border: 1px solid gray;
+    padding: 3px 5px;
 }
-.experimentList_tr_desc, .experimentList_tr_obs
+.experimentList_table_legend
 {
-    width: 30%;
+    background: gray;
 }
+
+.experimentList_table tr:hover td
+{
+    background: rgba(64, 64, 64, 0.5);  
+}
+
 
 .experiment_id
 {
-    width: 3%;
+    width: 4%;
+    /* border: 1px solid gray; */
 }
 .experiment_date
 {
-    width: 5%;
+    width: 8%;
+    /* border: 1px solid gray; */
 }
 
 .experiment_desc, .experiment_obs
 {
     width: 20%;
+    word-break: normal;
+    /* border: 1px solid gray; */
 }
 
 .experiment_name
 {
     width: 10%;
+    /* border: 1px solid gray; */
 }
