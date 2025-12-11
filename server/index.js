@@ -4,6 +4,7 @@ const dotenv = require('dotenv');
 const authRoutes = require('./routes/auth');
 const experimentRoutes = require('./routes/experiments');
 const userRoutes = require('./routes/users');
+const auditRoutes = require('./routes/audit');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -19,6 +20,7 @@ app.use(express.json());
 app.use('/api/auth', authRoutes);
 app.use('/api/experiments', experimentRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/audit', auditRoutes);
 
 app.listen(PORT, () => {
     console.log(`Сервер запущен на http://localhost:${PORT}`);

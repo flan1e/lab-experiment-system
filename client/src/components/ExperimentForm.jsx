@@ -12,6 +12,13 @@ const ExperimentForm = ({ onExperimentAdded }) => {
         setReagents([...reagents, { reagent_id: '', amount: '', unit: 'г' }]);
     };
 
+    const removeReagent = (index) => {
+        if (reagents.length <= 1) return; 
+        const newReagents = [...reagents];
+        newReagents.splice(index, 1);
+        setReagents(newReagents);
+    };
+
     const updateReagent = (index, field, value) => {
         const newReagents = [...reagents];
         newReagents[index][field] = value;
@@ -67,14 +74,42 @@ const ExperimentForm = ({ onExperimentAdded }) => {
                     <textarea value={obs} onChange={(e) => setObs(e.target.value)} required></textarea>
                 </div>
                 <h3>Реагенты</h3>
-                {reagents.map((r,i) => (
-                    <div key = {i} className='experiment_form_reagents'>
-                        <input type="number" placeholder='ID реагента' value={r.reagent_id} onChange={(e) => updateReagent(i, 'reagent_id', e.target.value)} required/>
-                        <input type="number" placeholder='Количество' value={r.amount} onChange={(e) => updateReagent(i, 'amount', e.target.value)} required />
-                        <select value={r.unit} onChange={(e) => updateReagent(i, 'unit', e.target.value)}>
+                {reagents.map((r, i) => (
+                    <div key={i} style={{ display: 'flex', gap: '10px', marginBottom: '10px', alignItems: 'center' }}>
+                        <input
+                            type="number"
+                            placeholder="ID реагента"
+                            value={r.reagent_id}
+                            onChange={(e) => updateReagent(i, 'reagent_id', e.target.value)}
+                            required
+                            min="1"
+                            style={{ width: '120px' }}
+                        />
+                        <input
+                            type="number"
+                            placeholder="Количество"
+                            value={r.amount}
+                            onChange={(e) => updateReagent(i, 'amount', e.target.value)}
+                            required
+                            min="0"
+                            step="0.01"
+                            style={{ width: '120px' }}
+                        />
+                        <select
+                            value={r.unit}
+                            onChange={(e) => updateReagent(i, 'unit', e.target.value)}
+                        >
                             <option value="г">г</option>
                             <option value="мл">мл</option>
                         </select>
+                        <button
+                            type="button"
+                            onClick={() => removeReagent(i)}
+                            style={{ backgroundColor: '#dc3545', color: 'white', border: 'none', borderRadius: '4px', width: '30px' }}
+                            disabled={reagents.length <= 1}
+                        >
+                            ✕
+                        </button>
                     </div>
                 ))}
                 <button type='button' onClick={addReagent}>Добавить реагент</button>

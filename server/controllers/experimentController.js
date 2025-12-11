@@ -4,11 +4,6 @@ exports.addExperiment = async (req, res) => {
     const { date_conducted, description, observations, reagents } = req.body;
     const user_id = parseInt(req.user.id, 10);
 
-    // console.log('req.user:', req.user);
-    // console.log('req.user.id:', req.user?.id);
-    // console.log('user_id (parsed):', user_id);
-
-
     try {
         if (isNaN(user_id) || user_id <= 0) {
             return res.status(401).json({ msg: 'Недопустимый или отсутствующий user_id' });
@@ -29,7 +24,9 @@ exports.addExperiment = async (req, res) => {
             return res.status(400).json({ msg: 'amount должен быть числом' });
         }
 
-        await db.query(`SET LOCAL app.current_user_id = ${user_id}`);
+        console.log('user_id для аудита:', user_id, typeof user_id);
+
+        // await db.query(`SET LOCAL app.current_user_id = ${user_id}`);
 
         const result = await db.query(
             'SELECT add_experiment($1, $2, $3, $4, $5, $6, $7) AS experiment_id',
@@ -45,7 +42,7 @@ exports.addExperiment = async (req, res) => {
 
 exports.getExperiments = async (req, res) => {
     const { user_id, date_from, date_to, reagent_id } = req.query;
-    
+
     try {
         const result = await db.query(
             'SELECT * FROM get_experiments($1, $2, $3, $4) ORDER BY experiment_id DESC',
@@ -89,7 +86,7 @@ exports.updateExperiment = async (req, res) => {
             return res.status(400).json({ msg: 'Некорректный user_id' });
         }
 
-        await db.query(`SET LOCAL app.current_user_id = ${user_id}`);
+        // await db.query(`SET LOCAL app.current_user_id = ${user_id}`);
 
         const reagent_ids = reagents.map(r => parseInt(r.reagent_id, 10));
         const amounts = reagents.map(r => parseFloat(r.amount));
@@ -121,7 +118,7 @@ exports.deleteExperiment = async (req, res) => {
             return res.status(400).json({ msg: 'Некорректный user_id' });
         }
 
-        await db.query(`SET LOCAL app.current_user_id = ${user_id}`);
+        // await db.query(`SET LOCAL app.current_user_id = ${user_id}`);
         await db.query('SELECT delete_experiment($1, $2)', [user_id, id]);
         res.json({ msg: 'Эксперимент удалён' });
     } catch (err) {

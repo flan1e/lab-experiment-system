@@ -6,6 +6,7 @@ import Dashboard from './components/Dashboard';
 import ExperimentDetail from './components/ExperimentDetail';
 import ExperimentEdit from './components/ExperimentEdit';
 import UsersPage from './pages/UsersPage';
+import AuditPage from './pages/AuditPage';
 import './App.css'
 
 function App() {
@@ -46,6 +47,7 @@ function App() {
                     <Route path="/experiment/:id" element={<ExperimentDetail user={user} />} />
                     <Route path="/experiment/:id/edit" element={<ExperimentEdit user={user} />} />
                     <Route path="/users" element={<UsersPage user={user} />} />
+                    <Route path="/audit" element={<AuditPage />} />
                 </Routes>
             </div>
         </Router>

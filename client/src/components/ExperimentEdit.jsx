@@ -10,7 +10,7 @@ const ExperimentEdit = ({ user }) => {
         date_conducted: '',
         description: '',
         observations: '',
-        reagents: []
+        reagents: [{ reagent_id: '', amount: '', unit: 'г' }]
     });
     const [loading, setLoading] = useState(true);
 
@@ -24,11 +24,13 @@ const ExperimentEdit = ({ user }) => {
                         date_conducted: exp.date_conducted,
                         description: exp.description || '',
                         observations: exp.observations || '',
-                        reagents: exp.reagents.map(r => ({
-                            reagent_id: parseInt(r.reagent_id, 10),
-                            amount: r.amount,
-                            unit: r.unit
-                        }))
+                        reagents: exp.reagents && exp.reagents.length > 0
+                            ? exp.reagents.map(r => ({
+                                reagent_id: r.reagent_id,
+                                amount: r.amount,
+                                unit: r.unit
+                            }))
+                            : [{ reagent_id: '', amount: '', unit: 'г' }]
                     });
                 }
             } catch (err) {
@@ -40,6 +42,26 @@ const ExperimentEdit = ({ user }) => {
         fetchExperiment();
     }, [id]);
 
+    const addReagent = () => {
+        setFormData(prev => ({
+            ...prev,
+            reagents: [...prev.reagents, { reagent_id: '', amount: '', unit: 'г' }]
+        }));
+    };
+
+    const removeReagent = (index) => {
+        if (formData.reagents.length <= 1) return;
+        const newReagents = [...formData.reagents];
+        newReagents.splice(index, 1);
+        setFormData(prev => ({ ...prev, reagents: newReagents }));
+    };
+
+    const updateReagent = (index, field, value) => {
+        const newReagents = [...formData.reagents];
+        newReagents[index][field] = value;
+        setFormData(prev => ({ ...prev, reagents: newReagents }));
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
@@ -49,20 +71,18 @@ const ExperimentEdit = ({ user }) => {
                     date_conducted: formData.date_conducted,
                     description: formData.description,
                     observations: formData.observations,
-                    reagents: formData.reagents
+                    reagents: formData.reagents.map(r => ({
+                        reagent_id: parseInt(r.reagent_id, 10),
+                        amount: parseFloat(r.amount),
+                        unit: r.unit
+                    }))
                 })
             });
-            alert('Изменения сохранены');
+            alert('✅ Изменения сохранены');
             navigate(`/experiment/${id}`);
         } catch (err) {
-            alert('Ошибка: ' + err.message);
+            alert('❌ Ошибка: ' + err.message);
         }
-    };
-
-    const updateReagent = (index, field, value) => {
-        const newReagents = [...formData.reagents];
-        newReagents[index][field] = value;
-        setFormData({ ...formData, reagents: newReagents });
     };
 
     if (loading) return <p>Загрузка...</p>;
@@ -97,13 +117,15 @@ const ExperimentEdit = ({ user }) => {
                 </div>
                 <h3>Реагенты</h3>
                 {formData.reagents.map((r, i) => (
-                    <div key={i} className='edit_form_reagents'>
+                    <div key={i} style={{ display: 'flex', gap: '10px', marginBottom: '10px', alignItems: 'center' }}>
                         <input
                             type="number"
                             placeholder="ID реагента"
                             value={r.reagent_id}
                             onChange={(e) => updateReagent(i, 'reagent_id', e.target.value)}
                             required
+                            min="1"
+                            style={{ width: '120px' }}
                         />
                         <input
                             type="number"
@@ -111,6 +133,9 @@ const ExperimentEdit = ({ user }) => {
                             value={r.amount}
                             onChange={(e) => updateReagent(i, 'amount', e.target.value)}
                             required
+                            min="0"
+                            step="0.01"
+                            style={{ width: '120px' }}
                         />
                         <select
                             value={r.unit}
@@ -119,8 +144,19 @@ const ExperimentEdit = ({ user }) => {
                             <option value="г">г</option>
                             <option value="мл">мл</option>
                         </select>
+                        <button
+                            type="button"
+                            onClick={() => removeReagent(i)}
+                            style={{ backgroundColor: '#dc3545', color: 'white', border: 'none', borderRadius: '4px', width: '30px' }}
+                            disabled={formData.reagents.length <= 1}
+                        >
+                            ✕
+                        </button>
                     </div>
                 ))}
+                <button type="button" onClick={addReagent} style={{ marginTop: '10px' }}>
+                    + Добавить реагент
+                </button>
                 <div className='edit_form_buttons'>
                     <button type="submit">Сохранить</button>
                     <button type="button" onClick={() => navigate(`/experiment/${id}`)}>Отмена</button>
