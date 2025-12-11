@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import apiCall from '../utils/api';
+import './AuditLog.css';
 
 const AuditLog = () => {
     const [logs, setLogs] = useState([]);
@@ -22,16 +23,16 @@ const AuditLog = () => {
     if (loading) return <p>Загрузка журнала...</p>;
 
     return (
-        <div style={{ padding: '20px' }}>
+        <div>
             <h2>Журнал аудита</h2>
-            <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '10px' }}>
+            <table style={{borderCollapse: 'collapse'}}>
                 <thead>
-                    <tr style={{ backgroundColor: '#f0f0f0' }}>
-                        <th>Время</th>
-                        <th>Операция</th>
-                        <th>Таблица</th>
-                        <th>Запись ID</th>
-                        <th>Пользователь</th>
+                    <tr>
+                        <th style={{border: '1px solid gray'}}>Время</th>
+                        <th style={{border: '1px solid gray'}}>Операция</th>
+                        <th style={{border: '1px solid gray'}}>Таблица</th>
+                        <th style={{border: '1px solid gray'}}>Запись ID</th>
+                        <th style={{border: '1px solid gray'}}>Пользователь</th>
                     </tr>
                 </thead>
                 <tbody>

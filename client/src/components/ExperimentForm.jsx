@@ -75,7 +75,7 @@ const ExperimentForm = ({ onExperimentAdded }) => {
                 </div>
                 <h3>Реагенты</h3>
                 {reagents.map((r, i) => (
-                    <div key={i} style={{ display: 'flex', gap: '10px', marginBottom: '10px', alignItems: 'center' }}>
+                    <div key={i} className='experiment_form_reagents'>
                         <input
                             type="number"
                             placeholder="ID реагента"
@@ -95,21 +95,11 @@ const ExperimentForm = ({ onExperimentAdded }) => {
                             step="0.01"
                             style={{ width: '120px' }}
                         />
-                        <select
-                            value={r.unit}
-                            onChange={(e) => updateReagent(i, 'unit', e.target.value)}
-                        >
+                        <select value={r.unit} onChange={(e) => updateReagent(i, 'unit', e.target.value)}>
                             <option value="г">г</option>
                             <option value="мл">мл</option>
                         </select>
-                        <button
-                            type="button"
-                            onClick={() => removeReagent(i)}
-                            style={{ backgroundColor: '#dc3545', color: 'white', border: 'none', borderRadius: '4px', width: '30px' }}
-                            disabled={reagents.length <= 1}
-                        >
-                            ✕
-                        </button>
+                        <button type="button" onClick={() => removeReagent(i)} disabled={reagents.length <= 1}> X </button>
                     </div>
                 ))}
                 <button type='button' onClick={addReagent}>Добавить реагент</button>

@@ -7,6 +7,7 @@ import ExperimentDetail from './components/ExperimentDetail';
 import ExperimentEdit from './components/ExperimentEdit';
 import UsersPage from './pages/UsersPage';
 import AuditPage from './pages/AuditPage';
+import StatisticsPage from './pages/StatisticsPage';
 import './App.css'
 
 function App() {
@@ -40,14 +41,15 @@ function App() {
 
     return (
         <Router>
+            <Navbar user={user} onLogout={handleLogout} className='app_navbar' />
             <div className='app'>
-                <Navbar user={user} onLogout={handleLogout} className='app_navbar' />
                 <Routes>
                     <Route path="/" element={<Dashboard user={user} />} />
                     <Route path="/experiment/:id" element={<ExperimentDetail user={user} />} />
                     <Route path="/experiment/:id/edit" element={<ExperimentEdit user={user} />} />
                     <Route path="/users" element={<UsersPage user={user} />} />
                     <Route path="/audit" element={<AuditPage />} />
+                    <Route path="/statistics" element={<StatisticsPage />} />
                 </Routes>
             </div>
         </Router>

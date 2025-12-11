@@ -57,7 +57,7 @@ const ExperimentDetail = ({ user }) => {
     return (
         <div className='experimentDetail'>
             <h1>Эксперимент #{experiment.experiment_id}</h1>
-            <p><strong>Дата:</strong> {experiment.date_conducted}</p>
+            <p><strong>Дата:</strong> {new Date(experiment.date_conducted).toLocaleDateString('ru-RU')}</p>
             <p><strong>Описание:</strong> {experiment.description}</p>
             <p><strong>Наблюдения:</strong> {experiment.observations}</p>
             <p><strong>Провёл:</strong> {experiment.user_full_name} (ID: {experiment.user_id})</p>

@@ -117,7 +117,7 @@ const ExperimentEdit = ({ user }) => {
                 </div>
                 <h3>Реагенты</h3>
                 {formData.reagents.map((r, i) => (
-                    <div key={i} style={{ display: 'flex', gap: '10px', marginBottom: '10px', alignItems: 'center' }}>
+                    <div key={i} style={{display: 'flex', height: "25px",gap: "10px", margin: '0 auto'}}>
                         <input
                             type="number"
                             placeholder="ID реагента"
@@ -137,26 +137,15 @@ const ExperimentEdit = ({ user }) => {
                             step="0.01"
                             style={{ width: '120px' }}
                         />
-                        <select
-                            value={r.unit}
-                            onChange={(e) => updateReagent(i, 'unit', e.target.value)}
-                        >
+                        <select value={r.unit} onChange={(e) => updateReagent(i, 'unit', e.target.value)}>
                             <option value="г">г</option>
                             <option value="мл">мл</option>
                         </select>
-                        <button
-                            type="button"
-                            onClick={() => removeReagent(i)}
-                            style={{ backgroundColor: '#dc3545', color: 'white', border: 'none', borderRadius: '4px', width: '30px' }}
-                            disabled={formData.reagents.length <= 1}
-                        >
-                            ✕
-                        </button>
+                        <button type="button" onClick={() => removeReagent(i)} disabled={formData.reagents.length <= 1}
+                        style={{background: '#c82333'}}>  </button>
                     </div>
                 ))}
-                <button type="button" onClick={addReagent} style={{ marginTop: '10px' }}>
-                    + Добавить реагент
-                </button>
+                <button type="button" onClick={addReagent} style={{ marginTop: '10px' }}> + Добавить реагент </button>
                 <div className='edit_form_buttons'>
                     <button type="submit">Сохранить</button>
                     <button type="button" onClick={() => navigate(`/experiment/${id}`)}>Отмена</button>

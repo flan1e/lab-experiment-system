@@ -52,4 +52,14 @@
     justify-content: center;
     flex-direction: row;
     gap: 5px;
+    margin: 0 auto;
+}
+
+.experiment_form_reagents button
+{
+    scale: 0.5;
+    width: auto;
+    color: white;
+    background: rgb(188, 17, 17);
+    
 }

@@ -143,7 +143,7 @@ const ExperimentList = ({ onRefresh, user }) => {
                                 }}
                             >
                                 <td className='experiment_id'>{exp.experiment_id}</td>
-                                <td>{exp.date_conducted}</td>
+                                <td>{new Date(exp.date_conducted).toLocaleDateString('ru-RU')}</td>
                                 <td>{exp.description}</td>
                                 <td>{exp.observations}</td> 
                                 <td className='experiment_name'>{exp.user_full_name}</td>

@@ -5,6 +5,7 @@ const authRoutes = require('./routes/auth');
 const experimentRoutes = require('./routes/experiments');
 const userRoutes = require('./routes/users');
 const auditRoutes = require('./routes/audit');
+const statisticsRoutes = require('./routes/statistics');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -21,6 +22,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/experiments', experimentRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/audit', auditRoutes);
+app.use('/api/statistics', statisticsRoutes);
 
 app.listen(PORT, () => {
     console.log(`Сервер запущен на http://localhost:${PORT}`);
