@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import apiCall from '../utils/api';
 import '../components/ExperimentDetail.css';
 import ReviewForm from './ReviewForm';
+import { generateExperimentPDF } from '../components/ExperimentPDF';
 
 const ExperimentDetail = ({ user }) => {
     const { id } = useParams();
@@ -119,6 +120,9 @@ const ExperimentDetail = ({ user }) => {
                     <button onClick={handleDelete} className='buttons_panel_delete'>🗑️ Удалить</button>
                 )}
             </div>
+            <button onClick={async () => {await generateExperimentPDF(experiment);}}>
+                📄 Скачать PDF
+            </button>
         </div>
     );
 };
