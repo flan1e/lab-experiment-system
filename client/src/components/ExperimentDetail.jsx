@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import apiCall from '../utils/api';
 import '../components/ExperimentDetail.css';
+import ReviewForm from './ReviewForm';
 
 const ExperimentDetail = ({ user }) => {
     const { id } = useParams();
@@ -9,6 +10,8 @@ const ExperimentDetail = ({ user }) => {
     const [experiment, setExperiment] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
+    const [review, setReview] = useState(null);
+    const [loadingReview, setLoadingReview] = useState(true);
 
     useEffect(() => {
         const fetchExperiment = async () => {
@@ -26,6 +29,20 @@ const ExperimentDetail = ({ user }) => {
             }
         };
         fetchExperiment();
+    }, [id]);
+
+    useEffect(() => {
+        const fetchReview = async () => {
+            try {
+                const data = await apiCall(`/reviews/experiment/${id}`);
+                setReview(data);
+            } catch (err) {
+                console.error('Ошибка загрузки отзыва', err);
+            } finally {
+                setLoadingReview(false);
+            }
+        };
+        fetchReview();
     }, [id]);
 
     const handleDelete = async () => {
@@ -49,9 +66,9 @@ const ExperimentDetail = ({ user }) => {
     if (loading) return <p>Загрузка...</p>;
     if (error) return <p style={{ color: 'red' }}>{error}</p>;
 
-    const canEditOrDelete = 
-        user.role === 'admin' || 
-        user.role === 'teacher' || 
+    const canEditOrDelete =
+        user.role === 'admin' ||
+        user.role === 'teacher' ||
         (user.role === 'student' && experiment && experiment.user_id == user.id);
 
     return (
@@ -79,6 +96,19 @@ const ExperimentDetail = ({ user }) => {
             ) : (
                 <p>Нет реагентов</p>
             )}
+
+            {!loadingReview && review && (
+                <div style={{ marginTop: '20px', padding: '15px', borderRadius: '8px' }}>
+                    <h3>Оценка</h3>
+                    <p><strong>Оценка:</strong> {review.rating} ⭐</p>
+                    {review.comment && <p><strong>Комментарий:</strong> {review.comment}</p>}
+                    <p><em>От: {review.reviewer_name} ({review.reviewer_role})</em></p>
+                </div>
+            )}
+
+            <ReviewForm experimentId={id} user={user} onReviewAdded={() => {
+                apiCall(`/reviews/experiment/${id}`).then(setReview);
+            }} />
 
             <div className='buttons_panel'>
                 <button onClick={() => navigate('/')}>← Назад </button>

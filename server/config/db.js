@@ -12,13 +12,13 @@ const pool = new Pool({
 
 pool.connect((err, client, release) => {
     if (err) {
-        console.error('❌ Ошибка подключения к PostgreSQL:', err.message);
+        console.error('Ошибка подключения к PostgreSQL:', err.message);
         console.error('Детали:', err);
     } else {
         console.log('✅ Успешно подключено к PostgreSQL');
         client.query('SELECT NOW()', (err, res) => {
             if (err) {
-                console.error('❌ Ошибка выполнения запроса:', err.message);
+                console.error('Ошибка выполнения запроса:', err.message);
             } else {
                 console.log('Текущее время:', res.rows[0].now);
             }
