@@ -68,3 +68,33 @@ exports.updateUser = async (req, res) => {
         res.status(500).json({ msg: 'Ошибка', error: err.message });
     }
 };
+
+exports.getAllUsers = async (req, res) => {
+    if (req.user.role !== 'admin') {
+        return res.status(403).json({ msg: 'Только администратор может просматривать пользователей' });
+    }
+
+    try {
+        const result = await db.query(`
+            SELECT user_id, username, full_name, role, is_active, created_at
+            FROM users
+            ORDER BY created_at DESC
+        `);
+        res.json(result.rows);
+    } catch (err) {
+        res.status(500).json({ msg: 'Ошибка сервера', error: err.message });
+    }
+};
+
+exports.activateUser = async (req, res) => {
+    const { user_id } = req.params;
+    if (req.user.role !== 'admin') {
+        return res.status(403).json({ msg: 'Только админ может активировать' });
+    }
+    try {
+        await db.query('SELECT activate_user($1, $2)', [req.user.id, user_id]);
+        res.json({ msg: 'Пользователь активирован' });
+    } catch (err) {
+        res.status(500).json({ msg: 'Ошибка', error: err.message });
+    }
+};

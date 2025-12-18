@@ -14,6 +14,12 @@ const Navbar = ({ user, onLogout }) => {
                             <a href="/users">👥 Создать пользователя</a>
                         </>
                     ) : null}
+
+                    {user.role === 'admin' && (
+                        <a href="/users/manage" style={{ marginLeft: '15px' }}>
+                            👥 Пользователи
+                        </a>
+                    )}
                 </div>
                 <div className="navbar-user-info">
                     <span>Пользователь: {user.username} ({user.role})</span>

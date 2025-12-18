@@ -74,6 +74,9 @@ const ExperimentForm = ({ onExperimentAdded }) => {
                     <textarea value={obs} onChange={(e) => setObs(e.target.value)} required></textarea>
                 </div>
                 <h3>Реагенты</h3>
+                {/* <button>
+                    <img src="src/assets/Mendeleev_table.png" alt="таблица_Менделеева" />
+                </button> */}
                 {reagents.map((r, i) => (
                     <div key={i} className='experiment_form_reagents'>
                         <input

@@ -8,6 +8,7 @@ import ExperimentEdit from './components/ExperimentEdit';
 import UsersPage from './pages/UsersPage';
 import AuditPage from './pages/AuditPage';
 import StatisticsPage from './pages/StatisticsPage';
+import UsersManagement from './pages/UsersManagement';
 import './App.css'
 
 function App() {
@@ -50,6 +51,7 @@ function App() {
                     <Route path="/users" element={<UsersPage user={user} />} />
                     <Route path="/audit" element={<AuditPage />} />
                     <Route path="/statistics" element={<StatisticsPage />} />
+                    <Route path="/users/manage" element={<UsersManagement />} />
                 </Routes>
             </div>
         </Router>

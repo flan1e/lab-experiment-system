@@ -20,3 +20,17 @@ exports.getStatistics = async (req, res) => {
         res.status(500).json({ msg: 'Ошибка сервера', error: err.message });
     }
 };
+
+exports.getStatisticsReport = async (req, res) => {
+    if (req.user.role !== 'admin' && req.user.role !== 'teacher') {
+        return res.status(403).json({ msg: 'Недостаточно прав' });
+    }
+
+    try {
+        const result = await db.query('SELECT generate_statistics_report() AS report');
+        res.set('Content-Type', 'text/plain; charset=utf-8');
+        res.send(result.rows[0].report);
+    } catch (err) {
+        res.status(500).json({ msg: 'Ошибка сервера', error: err.message });
+    }
+};
