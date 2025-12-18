@@ -3,8 +3,15 @@ const db = require('../config/db');
 
 exports.registerUser = async (req, res) => {
     const { username, password, full_name, role } = req.body;
+    const cleanUsername = (username || '').trim();
+    const cleanPassword = (password || '').trim();
+    const cleanFullName = (full_name || '').trim();
     const creatorId = parseInt(req.user.id, 10);
     const creatorRole = req.user.role;
+
+    if (!cleanUsername || !cleanPassword || !cleanFullName) {
+        return res.status(400).json({ msg: 'Все поля обязательны' });
+    }
 
     if (isNaN(creatorId) || creatorId <= 0) {
         return res.status(400).json({ msg: 'Некорректный ID создателя' });
@@ -20,11 +27,11 @@ exports.registerUser = async (req, res) => {
     try {
         // await db.query(`SET LOCAL app.current_user_id = ${creatorId}`);
 
-        const hashedPassword = await bcrypt.hash(password, 10);
+        const hashedPassword = await bcrypt.hash(cleanPassword, 10);
 
         await db.query(
             'SELECT add_new_user($1, $2, $3, $4, $5, $6)',
-            [creatorId, creatorRole, username, hashedPassword, full_name, role]
+            [creatorId, creatorRole, cleanUsername, hashedPassword, cleanFullName, role]
         );
 
         res.json({ msg: 'Пользователь успешно создан' });

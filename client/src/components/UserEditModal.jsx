@@ -46,7 +46,7 @@ const UserEditModal = ({ user, onClose, onUserUpdated }) => {
             zIndex: 1000
         }}>
             <div style={{
-                backgroundColor: 'white',
+                backgroundColor: 'gray',
                 padding: '20px',
                 borderRadius: '8px',
                 width: '400px',

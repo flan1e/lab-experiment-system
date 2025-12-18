@@ -28,6 +28,32 @@ const ExperimentForm = ({ onExperimentAdded }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        if (!date) {
+            alert('Укажите дату');
+            return;
+        }
+        if (!desc.trim()) {
+            alert('Описание обязательно');
+            return;
+        }
+        if (reagents.length === 0) {
+            alert('Добавьте хотя бы один реагент');
+            return;
+        }
+
+        const invalidReagent = reagents.find(r =>
+            !r.reagent_id ||
+            !r.amount ||
+            r.amount <= 0 ||
+            !['г', 'мл'].includes(r.unit)
+        );
+
+        if (invalidReagent) {
+            alert('Проверьте реагенты: ID, количество (>0) и единицу измерения (г/мл)');
+            return;
+        }
+
         try {
             await apiCall('/experiments', {
                 method: 'POST',

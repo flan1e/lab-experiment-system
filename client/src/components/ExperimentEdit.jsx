@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import apiCall from '../utils/api';
+import MendeleevTable from './MendeleevTable';
 import '../components/ExperimentsEdit.css'
 
 const ExperimentEdit = ({ user }) => {
@@ -116,8 +117,11 @@ const ExperimentEdit = ({ user }) => {
                     />
                 </div>
                 <h3>Реагенты</h3>
+                <div style={{ marginTop: '20px', marginBottom: '20px' }}>
+                    <MendeleevTable />
+                </div>
                 {formData.reagents.map((r, i) => (
-                    <div key={i} style={{display: 'flex', height: "25px",gap: "10px", margin: '0 auto'}}>
+                    <div key={i} style={{ display: 'flex', height: "25px", gap: "10px", margin: '0 auto' }}>
                         <input
                             type="number"
                             placeholder="ID реагента"
@@ -142,7 +146,7 @@ const ExperimentEdit = ({ user }) => {
                             <option value="мл">мл</option>
                         </select>
                         <button type="button" onClick={() => removeReagent(i)} disabled={formData.reagents.length <= 1}
-                        style={{background: '#c82333'}}>  </button>
+                            style={{ background: '#c82333' }}>  </button>
                     </div>
                 ))}
                 <button type="button" onClick={addReagent} style={{ marginTop: '10px' }}> + Добавить реагент </button>
