@@ -1,5 +1,6 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import apiCall from '../utils/api';
+import MendeleevTable from './MendeleevTable';
 import './ExperimentForm.css'
 
 const ExperimentForm = ({ onExperimentAdded }) => {
@@ -13,7 +14,7 @@ const ExperimentForm = ({ onExperimentAdded }) => {
     };
 
     const removeReagent = (index) => {
-        if (reagents.length <= 1) return; 
+        if (reagents.length <= 1) return;
         const newReagents = [...reagents];
         newReagents.splice(index, 1);
         setReagents(newReagents);
@@ -63,7 +64,7 @@ const ExperimentForm = ({ onExperimentAdded }) => {
             <form onSubmit={handleSubmit} className='experiment_form'>
                 <div className='experiment_form_desc'>
                     <label>Дата: </label>
-                    <input type="date" value={date} onChange={(e) => setDate(e.target.value)} required/>
+                    <input type="date" value={date} onChange={(e) => setDate(e.target.value)} required />
                 </div>
                 <div className='experiment_form_desc'>
                     <label>Описание: </label>
@@ -74,9 +75,9 @@ const ExperimentForm = ({ onExperimentAdded }) => {
                     <textarea value={obs} onChange={(e) => setObs(e.target.value)} required></textarea>
                 </div>
                 <h3>Реагенты</h3>
-                {/* <button>
-                    <img src="src/assets/Mendeleev_table.png" alt="таблица_Менделеева" />
-                </button> */}
+                <div style={{ marginTop: '20px' }}>
+                    <MendeleevTable />
+                </div>
                 {reagents.map((r, i) => (
                     <div key={i} className='experiment_form_reagents'>
                         <input
