@@ -23,7 +23,7 @@ exports.addExperiment = async (req, res) => {
         if (amounts.some(amt => isNaN(amt))) {
             return res.status(400).json({ msg: 'amount должен быть числом' });
         }
-
+        
         // console.log('user_id для аудита:', user_id, typeof user_id);
 
         // await db.query(`SET LOCAL app.current_user_id = ${user_id}`);

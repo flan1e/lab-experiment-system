@@ -18,10 +18,7 @@ exports.addReview = async (req, res) => {
     }
 
     try {
-        await db.query(
-            'SELECT add_or_update_review($1, $2, $3, $4)',
-            [experiment_id, reviewerId, rating, comment || null]
-        );
+        await db.query('SELECT add_or_update_review($1, $2, $3, $4)',[experiment_id, reviewerId, rating, comment || null]);
         res.json({ msg: 'Оценка сохранена' });
     } catch (err) {
         res.status(500).json({ msg: 'Ошибка сервера', error: err.message });

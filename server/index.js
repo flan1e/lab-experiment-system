@@ -14,11 +14,7 @@ const app = express();
 const PORT = process.env.PORT || 5173;
 
 dotenv.config();
-app.use(
-    cors({
-        origin: ['http://localhost:5173']  
-    })
-);
+app.use(cors({origin: ['http://localhost:5173']}));
 app.use(express.json());
 
 app.use('/api/auth', authRoutes);

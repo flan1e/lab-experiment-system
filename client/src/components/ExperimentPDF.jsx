@@ -1,4 +1,3 @@
-// src/components/ExperimentPDF.jsx
 import { PDFDocument } from 'pdf-lib';
 import fontkit from '@pdf-lib/fontkit';
 
