@@ -34,3 +34,16 @@ exports.getStatisticsReport = async (req, res) => {
         res.status(500).json({ msg: 'Ошибка сервера', error: err.message });
     }
 };
+
+exports.getStudentsGrades = async (req, res) => {
+    if (req.user.role !== 'teacher' && req.user.role !== 'admin') {
+        return res.status(403).json({ msg: 'Доступ запрещён' });
+    }
+
+    try {
+        const result = await db.query('SELECT * FROM get_students_grades()');
+        res.json(result.rows);
+    } catch (err) {
+        res.status(500).json({ msg: 'Ошибка сервера', error: err.message });
+    }
+};

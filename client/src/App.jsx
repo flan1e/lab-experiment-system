@@ -9,6 +9,7 @@ import UsersPage from './pages/UsersPage';
 import AuditPage from './pages/AuditPage';
 import StatisticsPage from './pages/StatisticsPage';
 import UsersManagement from './pages/UsersManagement';
+import GradesJournal from './pages/GradesJournal';
 import './App.css'
 
 function App() {
@@ -48,6 +49,7 @@ function App() {
                     <Route path="/" element={<Dashboard user={user} />} />
                     <Route path="/experiment/:id" element={<ExperimentDetail user={user} />} />
                     <Route path="/experiment/:id/edit" element={<ExperimentEdit user={user} />} />
+                    <Route path="/grades" element={<GradesJournal />} />
                     <Route path="/users" element={<UsersPage user={user} />} />
                     <Route path="/audit" element={<AuditPage />} />
                     <Route path="/statistics" element={<StatisticsPage />} />

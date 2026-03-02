@@ -10,6 +10,7 @@ const Navbar = ({ user, onLogout }) => {
                 <div className="navbar-links">
                     {user.role === 'teacher' || user.role === 'admin' ? (
                         <>
+                            <a href="/grades">📊 Журнал</a>
                             <a href="/audit">📜 Аудит</a>
                             <a href="/statistics">📊 Статистика</a>
                             <a href="/users">👥 Создать пользователя</a>

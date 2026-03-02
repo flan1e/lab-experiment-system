@@ -1,4 +1,3 @@
-// client/src/pages/StatisticsPage.jsx
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Statistics from '../components/Statistics';
