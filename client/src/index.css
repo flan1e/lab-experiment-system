@@ -1,4 +1,4 @@
-:root {
+/* :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
@@ -65,4 +65,32 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
+} */
+
+:root {
+    --bg: #ffffff;
+    --text: #000000;
+    --card-bg: #f8f9fa;
+    --border: #dee2e6;
+}
+
+.dark {
+    --bg: #121212;
+    --text: #e0e0e0;
+    --card-bg: #121212;
+    --border: #9a9898;
+}
+
+body {
+    background-color: var(--bg);
+    color: var(--text);
+    transition: background-color 0s, color 0s;
+}
+
+.card, table, input, button {
+    background-color: var(--card-bg);
+    /* border-color: var(--border); */
+    color: var(--text);
+    border-radius: 5px;
+    margin-bottom: 5px;
 }

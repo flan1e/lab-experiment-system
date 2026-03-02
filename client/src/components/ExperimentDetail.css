@@ -1,6 +1,7 @@
 .experimentDetail
 {
     width:70vw;
+    margin: 0 auto;
 }
 
 .buttons_panel
@@ -14,7 +15,13 @@
     
     justify-content: space-between;
 }
+
+.buttons_panel button
+{
+    height: 30px;
+}
 .buttons_panel_delete
 {
-    background: rgb(118, 14, 14);
+    background: rgb(209, 15, 15);
+    color: white;
 }

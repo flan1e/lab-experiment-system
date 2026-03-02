@@ -1,5 +1,6 @@
 import React from 'react';
 import './Navbar.css';
+import ThemeToggle from './ThemeToggle';
 
 const Navbar = ({ user, onLogout }) => {
     return (
@@ -22,6 +23,7 @@ const Navbar = ({ user, onLogout }) => {
                     )}
                 </div>
                 <div className="navbar-user-info">
+                    <ThemeToggle></ThemeToggle>
                     <span>Пользователь: {user.username} ({user.role})</span>
                     <button onClick={onLogout} className="navbar-logout-btn">
                         Выйти

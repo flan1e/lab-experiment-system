@@ -70,7 +70,7 @@ const ExperimentList = ({ onRefresh, user }) => {
             <h2>Список экспериментов</h2>
             <form className='experimentList_validation_form' onSubmit={handleFilterSubmit}>
                 <h3>Фильтрация</h3>
-                <div style={{ display: 'flex', gap: '15px', flexWrap: 'wrap', alignItems: 'center' }}>
+                <div style={{ display: 'flex', gap: '15px', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-evenly' }}>
                     <div>
                         <label>Пользователь (ID): </label>
                         <input

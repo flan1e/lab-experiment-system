@@ -149,7 +149,7 @@ const ExperimentEdit = ({ user }) => {
                             style={{ background: '#c82333' }}>  </button>
                     </div>
                 ))}
-                <button type="button" onClick={addReagent} style={{ marginTop: '10px' }}> + Добавить реагент </button>
+                <button type="button" onClick={addReagent} style={{ marginTop: '10px', width: '200px', margin: '0 auto' }}> + Добавить реагент </button>
                 <div className='edit_form_buttons'>
                     <button type="submit">Сохранить</button>
                     <button type="button" onClick={() => navigate(`/experiment/${id}`)}>Отмена</button>

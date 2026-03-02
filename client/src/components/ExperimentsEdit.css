@@ -1,6 +1,6 @@
 .edit_form
 {
-    width: 90vw;
+    width: 95%;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
@@ -27,6 +27,8 @@
 {
     resize: vertical;
     height: 10vh;
+    background: var(--bg);
+    color: var(--color);
 }
 
 .edit_form_reagents

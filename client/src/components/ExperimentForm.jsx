@@ -8,6 +8,7 @@ const ExperimentForm = ({ onExperimentAdded }) => {
     const [desc, setDesc] = useState('');
     const [obs, setObs] = useState('');
     const [reagents, setReagents] = useState([{ reagent_id: '', amount: '', unit: 'г' }]);
+    
 
     const addReagent = () => {
         setReagents([...reagents, { reagent_id: '', amount: '', unit: 'г' }]);
@@ -132,8 +133,8 @@ const ExperimentForm = ({ onExperimentAdded }) => {
                         <button type="button" onClick={() => removeReagent(i)} disabled={reagents.length <= 1}> X </button>
                     </div>
                 ))}
-                <button type='button' onClick={addReagent}>Добавить реагент</button>
-                <button type='submit'>Сохранить</button>
+                <button type='button' class='experiment_form_reagents_add' onClick={addReagent}>Добавить реагент</button>
+                <button type='submit'>Отправить работу</button>
             </form>
         </div>
     );

@@ -1,6 +1,8 @@
 .experimentList_validation_form
 {
     border: 1px solid gray;
+    margin-bottom: 10px;
+    border-radius: 5px;
 }
 
 .experimentList_table
@@ -17,7 +19,10 @@
 }
 .experimentList_table_legend
 {
-    background: gray;
+    background: var(--bg);
+    height: 40px;
+    font-size: larger;
+    font-weight: 900;
 }
 
 .experimentList_table tr:hover td

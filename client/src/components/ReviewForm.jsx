@@ -41,7 +41,7 @@ const ReviewForm = ({ experimentId, user, onReviewAdded }) => {
                         value={comment}
                         onChange={(e) => setComment(e.target.value)}
                         placeholder="Ваш комментарий..."
-                        style={{ width: '100%', height: '80px' }}
+                        style={{ width: '100%', height: '80px', background: 'var(--bg)', color: 'var(--color)' }}
                     />
                 </div>
                 <button type="submit" style={{ marginTop: '10px' }}>Сохранить оценку</button>

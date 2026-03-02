@@ -42,6 +42,9 @@ exports.addExperiment = async (req, res) => {
 
 exports.getExperiments = async (req, res) => {
     const { user_id, date_from, date_to, reagent_id } = req.query;
+    console.log(req.query.date_from);
+    console.log(date_to);
+
 
     try {
         const result = await db.query(

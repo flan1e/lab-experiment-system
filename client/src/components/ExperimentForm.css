@@ -22,6 +22,9 @@
     width: 30vw;
     justify-content: center;
     margin: 0 auto;
+    height: 40px;
+    /* background: rgb(33, 33, 33); */
+    border-color: var(--border);
 }
 
 .experiment_form_desc
@@ -43,6 +46,12 @@
     height: 10vh;
     width: 40vw;
     resize: vertical;
+    background-color: var(--bg);
+    color: var(--color);
+    border-radius: 5px;
+}
+.experiment_form_desc input[type='date']::-webkit-calendar-picker-indicator {
+    filter: invert(50%);
 }
 
 .experiment_form_reagents
@@ -62,4 +71,8 @@
     color: white;
     background: rgb(188, 17, 17);
     
+}
+.experiment_form_reagents_add button
+{
+    height: 40px;
 }
