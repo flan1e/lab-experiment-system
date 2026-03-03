@@ -76,6 +76,14 @@ const ExperimentDetail = ({ user }) => {
         <div className='experimentDetail'>
             <h1>Эксперимент #{experiment.experiment_id}</h1>
             <p><strong>Дата:</strong> {new Date(experiment.date_conducted).toLocaleDateString('ru-RU')}</p>
+            <div style={{
+                fontSize: '1.2rem',
+                fontWeight: 'bold',
+                color: '#007bff',
+                marginBottom: '8px'
+            }}>
+                {experiment.theme || 'Без темы'}
+            </div>
             <p><strong>Описание:</strong> {experiment.description}</p>
             <p><strong>Наблюдения:</strong> {experiment.observations}</p>
             <p><strong>Провёл:</strong> {experiment.user_full_name} (ID: {experiment.user_id})</p>
@@ -120,7 +128,7 @@ const ExperimentDetail = ({ user }) => {
                     <button onClick={handleDelete} className='buttons_panel_delete'>🗑️ Удалить</button>
                 )}
             </div>
-            <button onClick={async () => {await generateExperimentPDF(experiment);}}>
+            <button onClick={async () => { await generateExperimentPDF(experiment); }}>
                 📄 Скачать PDF
             </button>
         </div>

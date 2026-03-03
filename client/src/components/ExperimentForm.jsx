@@ -8,7 +8,8 @@ const ExperimentForm = ({ onExperimentAdded }) => {
     const [desc, setDesc] = useState('');
     const [obs, setObs] = useState('');
     const [reagents, setReagents] = useState([{ reagent_id: '', amount: '', unit: 'г' }]);
-    
+    const [theme, setTheme] = useState('');
+
 
     const addReagent = () => {
         setReagents([...reagents, { reagent_id: '', amount: '', unit: 'г' }]);
@@ -60,6 +61,7 @@ const ExperimentForm = ({ onExperimentAdded }) => {
                 method: 'POST',
                 body: JSON.stringify({
                     date_conducted: date,
+                    theme: theme,
                     description: desc,
                     observations: obs,
                     reagents: reagents.map(r => ({
@@ -92,6 +94,17 @@ const ExperimentForm = ({ onExperimentAdded }) => {
                 <div className='experiment_form_desc'>
                     <label>Дата: </label>
                     <input type="date" value={date} onChange={(e) => setDate(e.target.value)} required />
+                </div>
+                <div style={{display: 'flex', flexDirection: 'column', margin: '0 auto'}}>
+                    <label>Тема работы:</label>
+                    <input
+                        type="text"
+                        value={theme}
+                        onChange={(e) => setTheme(e.target.value)}
+                        placeholder="Например: Реакции щелочных металлов"
+                        style={{ width: '100%', padding: '6px 0', width: '40vw', textAlign: 'center', marginTop: '5px'}}
+                        required
+                    />
                 </div>
                 <div className='experiment_form_desc'>
                     <label>Описание: </label>

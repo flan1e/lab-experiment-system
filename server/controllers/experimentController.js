@@ -1,7 +1,7 @@
 const db = require('../config/db');
 
 exports.addExperiment = async (req, res) => {
-    const { date_conducted, description, observations, reagents } = req.body;
+    const { date_conducted, theme,  description, observations, reagents } = req.body;
     const user_id = parseInt(req.user.id, 10);
 
     try {
@@ -29,8 +29,8 @@ exports.addExperiment = async (req, res) => {
         // await db.query(`SET LOCAL app.current_user_id = ${user_id}`);
 
         const result = await db.query(
-            'SELECT add_experiment($1, $2, $3, $4, $5, $6, $7) AS experiment_id',
-            [user_id, date_conducted, description, observations, reagent_ids, amounts, units]
+            'SELECT add_experiment($1, $2, $3, $4, $5, $6, $7, $8) AS experiment_id',
+            [user_id, date_conducted, theme, description, observations, reagent_ids, amounts, units]
         );
 
         res.json({ msg: 'Эксперимент добавлен', id: result.rows[0].experiment_id });
@@ -48,7 +48,7 @@ exports.getExperiments = async (req, res) => {
 
     try {
         const result = await db.query(
-            'SELECT * FROM get_experiments($1, $2, $3, $4) ORDER BY experiment_id DESC',
+            'SELECT * FROM get_experiments($1::INTEGER, $2::DATE, $3::DATE, $4::INTEGER) ORDER BY experiment_id DESC',
             [user_id || null, date_from || null, date_to || null, reagent_id || null]
         );
         res.json(result.rows);
