@@ -59,7 +59,7 @@ const AuditLog = () => {
         <div style={{ padding: '20px' }} className='audit'>
             <h2>Журнал аудита</h2>
 
-            <form onSubmit={handleFilterSubmit} style={{ marginBottom: '20px', padding: '15px', borderRadius: '8px' }}>
+            <form onSubmit={handleFilterSubmit} style={{ margin: '0 auto', padding: '15px', borderRadius: '8px', width: '90%' }}>
                 <h3>Фильтрация</h3>
                 <div style={{ display: 'flex', gap: '15px', flexWrap: 'wrap', alignItems: 'center' }}>
                     <div>

@@ -76,12 +76,7 @@ const ExperimentDetail = ({ user }) => {
         <div className='experimentDetail'>
             <h1>Эксперимент #{experiment.experiment_id}</h1>
             <p><strong>Дата:</strong> {new Date(experiment.date_conducted).toLocaleDateString('ru-RU')}</p>
-            <div style={{
-                fontSize: '1.2rem',
-                fontWeight: 'bold',
-                color: '#007bff',
-                marginBottom: '8px'
-            }}>
+            <div style={{fontSize: '1.2rem', fontWeight: 'bold', color: '#007bff', marginBottom: '8px'}}> 
                 {experiment.theme || 'Без темы'}
             </div>
             <p><strong>Описание:</strong> {experiment.description}</p>

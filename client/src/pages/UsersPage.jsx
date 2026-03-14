@@ -10,7 +10,7 @@ const UsersPage = ({ user }) => {
         <div className='add_user_form'>
             <h2>Управление пользователями</h2>
             <UserForm user={user} />
-            <button onClick={() => navigate('/')}>← Назад</button>
+            <button onClick={() => navigate('/')} style={{margin: '0 auto'}}>← Назад</button>
         </div>
     );
 };

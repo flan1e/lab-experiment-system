@@ -8,6 +8,7 @@
     width: 35vw;
     height: 30vh; */
     text-align: center;
+    background: var(--bg);
 }
 
 .login_form
@@ -25,7 +26,8 @@
 }
 .login_inputs input
 {
-    background: rgb(47, 46, 46);
+    background: var(--bg);
+    color: var(--color);
 }
 
 .login_inputs button
@@ -33,7 +35,8 @@
     margin-top: 10px;
     height: 30px;
     width: 60px;
-    background: rgb(47, 46, 46);
+    background: var(--bg);
+    color: var(--color);
 }
 
 .login_inputs ::placeholder

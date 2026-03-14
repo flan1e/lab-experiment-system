@@ -101,8 +101,8 @@ const ExperimentForm = ({ onExperimentAdded }) => {
                         type="text"
                         value={theme}
                         onChange={(e) => setTheme(e.target.value)}
-                        placeholder="Например: Реакции щелочных металлов"
-                        style={{ width: '100%', padding: '6px 0', width: '40vw', textAlign: 'center', marginTop: '5px'}}
+                        placeholder="Например: Лабораторная работа №1"
+                        style={{ width: '100%', padding: '6px 0', width: '40vw', textAlign: 'center', marginTop: '5px', background: 'var(--bg)', color: 'var(--color)', borderColor:'var(--border)', }}
                         required
                     />
                 </div>
