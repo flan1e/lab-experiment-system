@@ -146,7 +146,7 @@ const ExperimentForm = ({ onExperimentAdded }) => {
                         <button type="button" onClick={() => removeReagent(i)} disabled={reagents.length <= 1}> X </button>
                     </div>
                 ))}
-                <button type='button' class='experiment_form_reagents_add' onClick={addReagent}>Добавить реагент</button>
+                <button type='button' className='experiment_form_reagents_add' onClick={addReagent}>Добавить реагент</button>
                 <button type='submit'>Отправить работу</button>
             </form>
         </div>

@@ -149,7 +149,7 @@ const ExperimentList = ({ onRefresh, user }) => {
                                 <td>{new Date(exp.date_conducted).toLocaleDateString('ru-RU')}</td>
                                 <td>{exp.description}</td>
                                 <td>{exp.observations}</td> 
-                                <td className='experiment_name'>{exp.user_full_name}</td>
+                                <td className='experiment_name'>{exp.last_name} {exp.first_name}{exp.middle_name && ` ${exp.middle_name}`}</td>
                             </tr>
                         );
                     })}

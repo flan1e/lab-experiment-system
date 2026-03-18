@@ -10,7 +10,8 @@ import AuditPage from './pages/AuditPage';
 import StatisticsPage from './pages/StatisticsPage';
 import UsersManagement from './pages/UsersManagement';
 import GradesJournal from './pages/GradesJournal';
-import './App.css'
+import AssignmentsPage from './pages/AssignmentsPage';
+import './App.css';
 
 function App() {
     const [user, setUser] = useState(null);
@@ -54,6 +55,7 @@ function App() {
                     <Route path="/audit" element={<AuditPage />} />
                     <Route path="/statistics" element={<StatisticsPage />} />
                     <Route path="/users/manage" element={<UsersManagement />} />
+                    <Route path="/assignments" element={<AssignmentsPage />} />
                 </Routes>
             </div>
         </Router>

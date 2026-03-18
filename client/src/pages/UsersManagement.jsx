@@ -74,8 +74,8 @@ const UsersManagement = () => {
                         <tr key={user.user_id} style={{ borderBottom: '1px solid #ddd' }}>
                             <td>{user.user_id}</td>
                             <td>{user.username}</td>
-                            <td>{user.full_name}</td>
-                            <td>{user.role}</td>
+                            <td>{user.last_name} {user.first_name} {user.middle_name}</td>
+                            <td>{user.role_name}</td>
                             <td>
                                 <span style={{ color: user.is_active ? 'green' : 'red' }}>
                                     {user.is_active ? 'Активен' : 'Неактивен'}

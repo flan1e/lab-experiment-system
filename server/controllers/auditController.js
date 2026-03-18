@@ -20,7 +20,9 @@ exports.getAuditLog = async (req, res) => {
             a.record_id,
             a.timestamp,
             u.username,
-            u.full_name
+            u.last_name,
+            u.first_name,
+            u.middle_name
         FROM audit_log a
         LEFT JOIN users u ON u.user_id = a.user_id
         WHERE 1=1

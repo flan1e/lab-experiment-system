@@ -10,8 +10,12 @@ exports.getStatistics = async (req, res) => {
         
         const total = result.rows.length > 0 ? parseInt(result.rows[0].total_experiments) : 0;
         const byUser = result.rows.map(row => ({
-            full_name: row.user_full_name,
-            role: row.user_role,
+            // full_name: row.user_full_name,
+            last_name: row.last_name,
+            first_name: row.first_name,
+            middle_name: row.middle_name,
+            // role: row.user_role,
+            role_name: row.role_name,
             count: parseInt(row.experiments_count)
         }));
 

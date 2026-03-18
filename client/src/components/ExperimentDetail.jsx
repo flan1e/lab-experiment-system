@@ -81,7 +81,7 @@ const ExperimentDetail = ({ user }) => {
             </div>
             <p><strong>Описание:</strong> {experiment.description}</p>
             <p><strong>Наблюдения:</strong> {experiment.observations}</p>
-            <p><strong>Провёл:</strong> {experiment.user_full_name} (ID: {experiment.user_id})</p>
+            <p><strong>Провёл:</strong> {experiment.last_name} {experiment.first_name} {experiment.middle_name && ` ${experiment.middle_name}`} (ID: {experiment.user_id})</p>
 
             <h3>Реагенты ({experiment.reagents?.length || 0})</h3>
             {experiment.reagents && experiment.reagents.length > 0 ? (

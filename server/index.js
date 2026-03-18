@@ -9,6 +9,7 @@ const auditRoutes = require('./routes/audit');
 const statisticsRoutes = require('./routes/statistics');
 const reviewRoutes = require('./routes/reviews');
 const checkUserActive = require('./middleware/checkUserActive');
+const assignmentRoutes = require('./routes/assignments');
 
 const app = express();
 const PORT = process.env.PORT || 5173;
@@ -23,6 +24,7 @@ app.use('/api/users', auth, checkUserActive, userRoutes);
 app.use('/api/audit', auth, checkUserActive, auditRoutes);
 app.use('/api/reviews', auth, checkUserActive, reviewRoutes);
 app.use('/api/statistics', auth, checkUserActive, statisticsRoutes);
+app.use('/api/assignments', auth, checkUserActive, assignmentRoutes);
 
 app.listen(PORT, () => {
     console.log(`Сервер запущен на http://localhost:${PORT}`);

@@ -2,14 +2,18 @@ const bcrypt = require('bcryptjs');
 const db = require('../config/db');
 
 exports.registerUser = async (req, res) => {
-    const { username, password, full_name, role } = req.body;
+    // const { last_name, first_name, middle_name, password, full_name, role } = req.body;
+    const { username, last_name, first_name, middle_name, password, role } = req.body;
     const cleanUsername = (username || '').trim();
     const cleanPassword = (password || '').trim();
-    const cleanFullName = (full_name || '').trim();
+    // const cleanFullName = (full_name || '').trim();
+    const cleanLastName = (last_name || '').trim();
+    const cleanFirstName = (last_name || '').trim();
+    const cleanMiddleName = (last_name || '').trim();
     const creatorId = parseInt(req.user.id, 10);
     const creatorRole = req.user.role;
 
-    if (!cleanUsername || !cleanPassword || !cleanFullName) {
+    if (!cleanUsername || !cleanPassword || !cleanLastName || !cleanFirstName || !cleanMiddleName) {
         return res.status(400).json({ msg: 'Все поля обязательны' });
     }
 
@@ -30,8 +34,8 @@ exports.registerUser = async (req, res) => {
         const hashedPassword = await bcrypt.hash(cleanPassword, 10);
 
         await db.query(
-            'SELECT add_new_user($1, $2, $3, $4, $5, $6)',
-            [creatorId, creatorRole, cleanUsername, hashedPassword, cleanFullName, role]
+            'SELECT add_new_user($1, $2, $3, $4, $5, $6, $7)',
+            [creatorRole, username, hashedPassword, last_name, first_name, middle_name, role]
         );
 
         res.json({ msg: 'Пользователь успешно создан' });
@@ -58,7 +62,7 @@ exports.deactivateUser = async (req, res) => {
 
 exports.updateUser = async (req, res) => {
     const { user_id } = req.params;
-    const { full_name, role, new_password } = req.body;
+    const { last_name, first_name, middle_name, role, new_password } = req.body;
     const adminId = req.user.id;
 
     if (req.user.role !== 'admin') {
@@ -68,7 +72,7 @@ exports.updateUser = async (req, res) => {
     try {
         await db.query(
             'SELECT update_user($1, $2, $3, $4, $5)',
-            [adminId, user_id, full_name, role, new_password || null]
+            [adminId, user_id, last_name, first_name, middle_name, role, new_password || null]
         );
         res.json({ msg: 'Пользователь обновлён' });
     } catch (err) {
@@ -83,8 +87,8 @@ exports.getAllUsers = async (req, res) => {
 
     try {
         const result = await db.query(`
-            SELECT user_id, username, full_name, role, is_active, created_at
-            FROM users
+            SELECT user_id, username, last_name, first_name, middle_name, role_name, is_active, created_at
+            FROM users u JOIN roles r on u.role_id = r.role_id 
             ORDER BY created_at DESC
         `);
         res.json(result.rows);

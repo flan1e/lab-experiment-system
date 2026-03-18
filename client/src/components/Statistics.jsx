@@ -39,8 +39,8 @@ const Statistics = () => {
                 <tbody>
                     {stats.byUser.map((user, i) => (
                         <tr key={i} style={{ borderBottom: '1px solid #ddd' }}>
-                            <td>{user.full_name}</td>
-                            <td>{user.role}</td>
+                            <td>{user.last_name} {user.first_name} {user.middle_name}</td>
+                            <td>{user.role_name}</td>
                             <td>{user.count}</td>
                         </tr>
                     ))}

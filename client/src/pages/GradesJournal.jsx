@@ -40,7 +40,7 @@ const GradesJournal = () => {
                         grades.map(student => (
                             <tr key={student.student_id} style={{ borderBottom: '1px solid #ddd' }}>
                                 <td>{student.student_id}</td>
-                                <td>{student.full_name}</td>
+                                <td>{student.last_name} {student.first_name} {student.middle_name}</td>
                                 <td>
                                     {student.average_rating ? (
                                         <span style={{ fontWeight: 'bold', color: '#28a745' }}>

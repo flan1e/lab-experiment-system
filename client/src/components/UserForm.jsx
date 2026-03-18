@@ -6,7 +6,9 @@ const UserForm = ({ user, onUserCreated }) => {
     const [formData, setFormData] = useState({
         username: '',
         password: '',
-        full_name: '',
+        last_name: '',
+        first_name: '',
+        middle_name: '',
         role: 'student'
     });
 
@@ -23,7 +25,7 @@ const UserForm = ({ user, onUserCreated }) => {
                 body: JSON.stringify(formData)
             });
             alert('✅ Пользователь создан');
-            setFormData({ username: '', password: '', full_name: '', role: 'student' });
+            setFormData({ username: '', password: '', last_name: '', first_name:'', middle_name:'', role: 'student' });
             if (onUserCreated) onUserCreated();
         } catch (err) {
             alert('❌ Ошибка: ' + err.message);
@@ -53,9 +55,21 @@ const UserForm = ({ user, onUserCreated }) => {
                     <label>Пароль:</label>
                     <input type="password" name="password" value={formData.password} onChange={handleChange} required />
                 </div>
-                <div className='add_user_option'>
+                {/* <div className='add_user_option'>
                     <label>ФИО:</label>
                     <input type="text" name="full_name" value={formData.full_name} onChange={handleChange} required />
+                </div> */}
+                <div className='add_user_option'>
+                    <label>Фамилия:</label>
+                    <input type="text" name="last_name" value={formData.last_name} onChange={handleChange} required />
+                </div>
+                <div className='add_user_option'>
+                    <label>Имя:</label>
+                    <input type="text" name="first_name" value={formData.first_name} onChange={handleChange} required />
+                </div>
+                <div className='add_user_option'>
+                    <label>Отчество:</label>
+                    <input type="text" name="middle_name" value={formData.middle_name} onChange={handleChange} required />
                 </div>
                 <div className='add_user_option'>
                     <label>Роль:</label>

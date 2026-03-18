@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Statistics from '../components/Statistics';
-import apiCall from '../utils/api'; // для получения токена
+import apiCall from '../utils/api'; 
 
 const StatisticsPage = () => {
     const navigate = useNavigate();

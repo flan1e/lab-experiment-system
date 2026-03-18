@@ -33,10 +33,10 @@ exports.getReviewByExperiment = async (req, res) => {
                 r.rating,
                 r.comment,
                 r.created_at,
-                u.full_name AS reviewer_name,
-                u.role AS reviewer_role
+                u.last_name || ' ' || u.first_name || COALESCE(' ' || u.middle_name, '') AS full_name,
+                ro.role_name AS reviewer_role
             FROM experiment_reviews r
-            JOIN users u ON u.user_id = r.reviewer_id
+            JOIN users u ON u.user_id = r.reviewer_id JOIN roles ro on u.role_id = ro.role_id
             WHERE r.experiment_id = $1
         `, [experiment_id]);
         res.json(result.rows[0] || null);
