@@ -1,57 +1,98 @@
-/* src/components/Navbar.css */
-.navbar {
-    top: 0;
-    width: 95%;
-    padding: 10px 20px;
-    /* background-color: #f8f9fa; */
-    border-bottom: 1px solid #ddd;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    margin: 0;
+.navbar-wrapper {
+    width: 100%;
 }
 
-.navbar h3 {
+.navbar-title {
+    text-align: center;
     margin: 0;
-    /* color: #333; */
+    padding: 10px 0;
+    background-color: var(--card-bg);
+    color: var(--text);
+    border-bottom: 1px solid var(--border);
+    font-size: 1.4rem;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 10px 20px;
+    background-color: var(--card-bg);
+    position: relative;
+}
+
+.navbar-hamburger {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: var(--text);
+    margin-right: 15px;
+    min-width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.navbar-content {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    gap: 20px;
 }
 
 .navbar-links {
     display: flex;
     gap: 15px;
-}
-
-.navbar-under
-{
-    display: flex;
-    justify-content: space-between;
-    width: 95%;
+    flex-wrap: wrap;
+    align-items: center;
 }
 
 .navbar-links a {
     text-decoration: none;
-    color: #007bff;
-    font-weight: bold;
-}
-
-.navbar-links a:hover {
-    color: #0056b3;
+    color: var(--text);
+    white-space: nowrap;
 }
 
 .navbar-user-info {
     display: flex;
     align-items: center;
     gap: 10px;
+    flex-wrap: wrap;
 }
 
 .navbar-logout-btn {
-    background-color: #dc3545;
+    background: #dc3545;
     color: white;
     border: none;
     padding: 5px 10px;
     border-radius: 4px;
     cursor: pointer;
-    font-size: 14px;
+    white-space: nowrap;
 }
 
-.navbar-logout-btn:hover {
-    background-color: #c82333;
+/* Мобильное меню */
+.navbar-mobile-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: var(--card-bg);
+    border: 1px solid var(--border);
+    padding: 15px;
+    z-index: 100;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.navbar-links.mobile {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+@media (min-width: 769px) {
+    .navbar-hamburger {
+        display: block; 
+    }
 }

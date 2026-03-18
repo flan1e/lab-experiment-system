@@ -1,46 +1,111 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './Navbar.css';
 import ThemeToggle from './ThemeToggle';
 
 const Navbar = ({ user, onLogout }) => {
-    const isTeacherOrAdmin = user?.role === 'teacher' || user?.role === 'admin';
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+    useEffect(() => {
+        const handleResize = () => {
+            const mobile = window.innerWidth <= 768;
+            setIsMobile(mobile);
+            if (!mobile) setIsMenuOpen(false);
+        };
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    const isStudent = user?.role === 'student';
+    const isTeacher = user?.role === 'teacher';
     const isAdmin = user?.role === 'admin';
 
+    // Все пункты меню по ролям
+    const allMenuItems = (
+        <>
+            <a href="/assignments">📚 Методичка</a>
+            {(isTeacher || isAdmin) && <a href="/grades">📊 Журнал</a>}
+            {(isAdmin || isTeacher) && <a href="/audit">📜 Аудит</a>}
+            {(isAdmin || isTeacher) && <a href="/statistics">📈 Статистика</a>}
+            {(isTeacher || isAdmin) && <a href="/users">👥 Создать пользователя</a>}
+            {isAdmin && <a href="/users/manage">👥 Управление пользователями</a>}
+        </>
+    );
+
+    // Пункты, всегда видимые на десктопе
+    const alwaysVisible = !isMobile && !isStudent ? (
+        <>
+            {(isTeacher) &&<a href="/assignments">📚 Методичка</a>}
+            {(isTeacher) && <a href="/grades">📊 Журнал</a>}
+            {isAdmin && (
+                <>
+                    <a href="/audit">📜 Аудит</a>
+                    <a href="/statistics">📈 Статистика</a>
+                    <a href="/users">👥 Создать пользователя</a>
+                    <a href="/users/manage">👥 Управление пользователями</a>
+                </>
+            )}
+            {isTeacher && <a href="/users">👥 Создать пользователя</a>}
+        </>
+    ) : null;
+
     return (
-        <nav className="navbar">
-            {/* <h3>Лабораторный журнал</h3> */}
-            <a href="/" style={{fontSize: '20px', color: 'var(--color)', textDecoration: 'none'}}>Лабораторный журнал</a>
-            <div className='navbar-under'>
-                <div className="navbar-links">
-                    <a href="/assignments">📚 Методичка</a>
+        <div className="navbar-wrapper">
+            {/* <h1 className="navbar-title">Лабораторный журнал</h1> */}
+            <a href="/" style={{textDecoration: 'none', color: 'var(--color)'}}><h2>Лабораторный журнал</h2></a>
 
-                    {isTeacherOrAdmin && (
-                        <>
-                            <a href="/grades">📊 Журнал</a>
-                            <a href="/audit">📜 Аудит</a>
-                            <a href="/statistics">📈 Статистика</a>
-                            <a href="/users">👥 Создать пользователя</a>
-                        </>
-                    )}
-
-                    {isAdmin && (
-                        <a href="/users/manage" style={{ marginLeft: '15px' }}>
-                            👥 Управление пользователями
-                        </a>
-                    )}
-                </div>
-
-                <div className="navbar-user-info">
-                    <ThemeToggle />
-                    <span>
-                        Пользователь: {user?.last_name} {user?.first_name} ({user?.role})
-                    </span>
-                    <button onClick={onLogout} className="navbar-logout-btn">
-                        Выйти
+            <nav className="navbar">
+                {(isMobile || !isStudent) && (
+                    <button
+                        className="navbar-hamburger"
+                        onClick={() => setIsMenuOpen(!isMenuOpen)}
+                        aria-label="Меню"
+                    >
+                        ☰
                     </button>
+                )}
+
+                <div className="navbar-content">
+                    {/* всегда видимая методичка + остальное по ролям */}
+                    {!isMobile && (
+                        <div className="navbar-links">
+                            <a href="/assignments">📚 Методичка</a>
+                            {isTeacher && (
+                                <>
+                                    <a href="/grades">📊 Журнал</a>
+                                    <a href="/users">👥 Создать пользователя</a>
+                                </>
+                            )}
+                            {isAdmin && (
+                                <>
+                                    <a href="/audit">📜 Аудит</a>
+                                    <a href="/statistics">📈 Статистика</a>
+                                    <a href="/users">👥 Создать пользователя</a>
+                                    <a href="/users/manage">👥 Управление пользователями</a>
+                                </>
+                            )}
+                        </div>
+                    )}
+
+                    <div className="navbar-user-info">
+                        <ThemeToggle />
+                        <span>
+                            Пользователь: {user?.last_name} {user?.first_name} ({user?.role})
+                        </span>
+                        <button onClick={onLogout} className="navbar-logout-btn">
+                            Выйти
+                        </button>
+                    </div>
                 </div>
-            </div>
-        </nav>
+
+                {/* Выпадающее меню */}
+                {(isMobile || !isStudent) && isMenuOpen && (
+                    <div className="navbar-mobile-menu">
+                        <div className="navbar-links mobile">{allMenuItems}</div>
+                    </div>
+                )}
+            </nav>
+        </div>
     );
 };
 

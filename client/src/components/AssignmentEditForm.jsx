@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import apiCall from '../utils/api';
+import MendeleevTable from './MendeleevTable';
 
 const AssignmentEditForm = () => {
-    const { id } = useParams(); // undefined при создании
+    const { id } = useParams();
     const navigate = useNavigate();
     const isNew = !id;
 
@@ -13,7 +14,6 @@ const AssignmentEditForm = () => {
     const [is_active, setIsActive] = useState(true);
     const [reagent_ids, setReagentIds] = useState('');
 
-    // Загрузка при редактировании
     useEffect(() => {
         if (!isNew) {
             const load = async () => {
@@ -69,7 +69,7 @@ const AssignmentEditForm = () => {
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
                         required
-                        style={{ width: '100%', padding: '5px' }}
+                        style={{ width: '100%', padding: '5px', resize: 'vertical' }}
                     />
                 </div>
                 <div style={{ marginBottom: '10px' }}>
@@ -79,7 +79,7 @@ const AssignmentEditForm = () => {
                         onChange={(e) => setDescription(e.target.value)}
                         required
                         rows="4"
-                        style={{ width: '100%', padding: '5px' }}
+                        style={{ width: '100%', padding: '5px', resize: 'vertical' }}
                     />
                 </div>
                 <div style={{ marginBottom: '10px' }}>
@@ -88,7 +88,7 @@ const AssignmentEditForm = () => {
                         value={instructions}
                         onChange={(e) => setInstructions(e.target.value)}
                         rows="3"
-                        style={{ width: '100%', padding: '5px' }}
+                        style={{ width: '100%', padding: '5px', resize: 'vertical' }}
                     />
                 </div>
                 {!isNew && (
@@ -112,6 +112,9 @@ const AssignmentEditForm = () => {
                         placeholder="1, 3, 5"
                         style={{ width: '100%', padding: '5px' }}
                     />
+                </div>
+                <div style={{ marginTop: '20px' }}>
+                    <MendeleevTable />
                 </div>
                 <button type="submit">Сохранить</button>
                 <button type="button" onClick={() => navigate('/assignments')} style={{ marginLeft: '10px' }}>

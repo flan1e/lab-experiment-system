@@ -13,7 +13,7 @@ const AssignmentsPage = () => {
         try {
             const payload = JSON.parse(atob(token.split('.')[1]));
             userRole = payload.user?.role;
-        } catch (e) {}
+        } catch (e) { }
     }
 
     useEffect(() => {
@@ -31,12 +31,16 @@ const AssignmentsPage = () => {
     return (
         <div style={{ padding: '20px' }}>
             <h2>Методичка</h2>
-            <button onClick={() => navigate('/')}>← Назад</button>
-            {(userRole === 'teacher' || userRole === 'admin') && (
-                <Link to="/assignments/new" style={{ marginBottom: '20px', display: 'inline-block' }}>
-                    <button>+ Новое задание</button>
-                </Link>
-            )}
+            <div style={{ width:'90%', display: 'flex', flexDirection: 'column', margin: '0 auto', alignItems:'center', gap: '10px'}}>
+
+                <button onClick={() => navigate('/')} style={{width: 'fit-content'}}>← Назад</button>
+
+                {(userRole === 'teacher' || userRole === 'admin') && (
+                    <Link to="/assignments/new" style={{ marginBottom: '20px', display: 'inline-block' }}>
+                        <button>+ Новое задание</button>
+                    </Link>
+                )}
+            </div>
 
             <div style={{ marginTop: '20px' }}>
                 {assignments.map(a => (
@@ -46,7 +50,7 @@ const AssignmentsPage = () => {
                         display: 'flex',
                         justifyContent: 'space-between',
                         alignItems: 'center',
-                        
+
                     }}>
                         <Link to={`/assignments/${a.assignment_id}`} style={{ textDecoration: 'none', color: '#007bff' }}>
                             {a.title}
