@@ -11,6 +11,8 @@ import StatisticsPage from './pages/StatisticsPage';
 import UsersManagement from './pages/UsersManagement';
 import GradesJournal from './pages/GradesJournal';
 import AssignmentsPage from './pages/AssignmentsPage';
+import AssignmentDetail from './components/AssignmentDetail';
+import AssignmentEditForm from './components/AssignmentEditForm';
 import './App.css';
 
 function App() {
@@ -18,6 +20,7 @@ function App() {
 
     useEffect(() => {
         const token = localStorage.getItem('token');
+        const savedUser = localStorage.getItem('user');
         if (token) {
             try {
                 const payload = JSON.parse(atob(token.split('.')[1]));
@@ -25,6 +28,14 @@ function App() {
             } catch (err) {
                 console.error('Не удалось расшифровать токен', err);
                 localStorage.removeItem('token');
+            }
+        }
+        if (savedUser) {
+            try {
+                setUser(JSON.parse(savedUser));
+            } catch (e) {
+                console.error('Ошибка восстановления пользователя');
+                localStorage.removeItem('user');
             }
         }
     }, []);
@@ -56,6 +67,9 @@ function App() {
                     <Route path="/statistics" element={<StatisticsPage />} />
                     <Route path="/users/manage" element={<UsersManagement />} />
                     <Route path="/assignments" element={<AssignmentsPage />} />
+                    <Route path="/assignments/new" element={<AssignmentEditForm />} />
+                    <Route path="/assignments/:id" element={<AssignmentDetail />} />
+                    <Route path="/assignments/:id/edit" element={<AssignmentEditForm />} />
                 </Routes>
             </div>
         </Router>
