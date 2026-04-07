@@ -45,9 +45,9 @@ const AssignmentDetail = () => {
             )}
 
             {assignment.reagents?.length > 0 && (
-                <div>
+                <div style={{width: '200px', margin: '0 auto'}}>
                     <strong>Необходимые реагенты:</strong>
-                    <ul>
+                    <ul style={{listStyle: 'none'}}>
                         {assignment.reagents.map(r => (
                             <li key={r.id}>{r.name}</li>
                         ))}
@@ -56,7 +56,7 @@ const AssignmentDetail = () => {
             )}
 
             {(userRole === 'teacher' || userRole === 'admin') && (
-                <div style={{ marginTop: '20px' }}>
+                <div style={{ margin: '20px auto', }}>
                     <button onClick={() => navigate(`/assignments/${id}/edit`)}>
                         Редактировать
                     </button>

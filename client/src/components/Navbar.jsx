@@ -90,7 +90,7 @@ const Navbar = ({ user, onLogout }) => {
                     <div className="navbar-user-info">
                         <ThemeToggle />
                         <span>
-                            Пользователь: {user?.last_name} {user?.first_name} ({user?.role})
+                            Пользователь: {user?.last_name} {user?.first_name} {user?.middle_name} ({user?.role})
                         </span>
                         <button onClick={onLogout} className="navbar-logout-btn">
                             Выйти
