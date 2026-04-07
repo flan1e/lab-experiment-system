@@ -94,7 +94,7 @@ export const generateExperimentPDF = async (experiment) => {
             ['Дата', new Date(experiment.date_conducted).toLocaleDateString('ru-RU')],
             ['Описание', experiment.description || '—'],
             ['Наблюдения', experiment.observations || '—'],
-            ['Провёл', experiment.user_full_name || '—'],
+            ['Провёл', experiment.last_name + " " + experiment.first_name + " " + experiment.middle_name || '—'],
         ];
 
         for (const [label, value] of fields) {

@@ -13,7 +13,7 @@ const ThemeToggle = () => {
                 cursor: 'pointer'
             }}
         >
-            {darkMode ? '☀️' : '🌙'}
+            {darkMode ? '🌙' : '☀️'}
         </button>
     );
 };
