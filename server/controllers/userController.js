@@ -8,8 +8,8 @@ exports.registerUser = async (req, res) => {
     const cleanPassword = (password || '').trim();
     // const cleanFullName = (full_name || '').trim();
     const cleanLastName = (last_name || '').trim();
-    const cleanFirstName = (last_name || '').trim();
-    const cleanMiddleName = (last_name || '').trim();
+    const cleanFirstName = (first_name || '').trim();
+    const cleanMiddleName = (middle_name || '').trim();
     const creatorId = parseInt(req.user.id, 10);
     const creatorRole = req.user.role;
 
@@ -62,7 +62,7 @@ exports.deactivateUser = async (req, res) => {
 
 exports.updateUser = async (req, res) => {
     const { user_id } = req.params;
-    const { last_name, first_name, middle_name, role, new_password } = req.body;
+    const { last_name, first_name, middle_name, role_id, new_password } = req.body;
     const adminId = req.user.id;
 
     if (req.user.role !== 'admin') {
@@ -70,12 +70,25 @@ exports.updateUser = async (req, res) => {
     }
 
     try {
+        const roleResult = await db.query(
+            'SELECT role_name FROM roles WHERE role_id = $1',
+            [role_id]
+        );
+
+        if (roleResult.rows.length === 0) {
+            return res.status(400).json({ msg: 'Неверный ID роли' });
+        }
+
+        const roleName = roleResult.rows[0].role_name;
+        console.log('Конвертировано role_id:', role_id, '→ role_name:', roleName); // ← для отладки
+
         await db.query(
-            'SELECT update_user($1, $2, $3, $4, $5)',
-            [adminId, user_id, last_name, first_name, middle_name, role, new_password || null]
+            'SELECT update_user($1, $2, $3, $4, $5, $6, $7)',
+            [adminId, user_id, last_name, first_name, middle_name, roleName, new_password || null]
         );
         res.json({ msg: 'Пользователь обновлён' });
     } catch (err) {
+        console.error('❌ Update user error:', err);
         res.status(500).json({ msg: 'Ошибка', error: err.message });
     }
 };

@@ -7,8 +7,13 @@ const Login = ({ onLogin }) => {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
 
+    const [showWelcome, setShowWelcome] = useState(false);
+    const [userName, setUserName] = useState('');
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setError('');
+
         try {
             const data = await ApiCall('/auth/login', {
                 method: 'POST',
@@ -17,9 +22,14 @@ const Login = ({ onLogin }) => {
 
             localStorage.setItem('token', data.token);
             localStorage.setItem('user', JSON.stringify(data.user));
-            // localStorage.setItem('user', JSON.stringify(data.user));
 
-            onLogin(data.user);
+            setUserName(data.user.first_name + " " + data.user.middle_name || data.user.username || username);
+            setShowWelcome(true);
+
+            setTimeout(() => {
+                onLogin(data.user); 
+            }, 2000);
+
         } catch (err) {
             setError(err.message || 'Ошибка входа');
         }
@@ -50,7 +60,17 @@ const Login = ({ onLogin }) => {
                 </div>
                 <button type='submit'>Войти</button>
             </form>
+
+            {
+                showWelcome && (
+                    <div className="welcome-overlay visible">
+                        <h1 className="welcome-text">Добро пожаловать, {userName}!</h1>
+                    </div>
+                )
+            }
         </div>
+
+
     );
 };
 

@@ -43,3 +43,55 @@
 {
     text-align: center;
 }
+
+
+
+/* Оверлей на весь экран */
+.welcome-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg);
+    color: var(--color);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+    z-index: 1000;
+}
+
+.welcome-overlay.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.welcome-text {
+    font-size: 2.5rem;
+    font-weight: 600;
+    transform: translateY(30px);
+    transition: transform 0.5s ease;
+    animation: pulse 0.3s ease-in-out;
+}
+
+.welcome-overlay.visible .welcome-text {
+    transform: translateY(0);
+}
+
+@keyframes pulse {
+    0% { transform: scale(0.95); }
+    50% { transform: scale(1.02); }
+    100% { transform: scale(1); }
+}
+
+/* Адаптив для мобильных */
+@media (max-width: 768px) {
+    .welcome-text {
+        font-size: 1.8rem;
+        padding: 0 20px;
+        text-align: center;
+    }
+}
