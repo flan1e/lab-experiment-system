@@ -1,46 +1,52 @@
+// client/src/pages/GradesJournal.jsx
 import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import apiCall from '../utils/api';
-import { Navigate, useNavigate } from 'react-router-dom';
 
 const GradesJournal = () => {
-    const [grades, setGrades] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const navigate = useNavigate();
+    const [students, setStudents] = useState([]);
+    const [expandedStudentId, setExpandedStudentId] = useState(null);
 
     useEffect(() => {
         const fetchGrades = async () => {
             try {
                 const data = await apiCall('/statistics/grades');
-                setGrades(data);
+                setStudents(data);
             } catch (err) {
                 alert('Ошибка загрузки журнала: ' + err.message);
-            } finally {
-                setLoading(false);
             }
         };
         fetchGrades();
     }, []);
 
-    if (loading) return <p>Загрузка журнала...</p>;
+    const toggleStudent = (studentId) => {
+        setExpandedStudentId(expandedStudentId === studentId ? null : studentId);
+    };
 
     return (
         <div style={{ padding: '20px' }}>
-            <button onClick={() => navigate('/')}>← Назад</button>
             <h2>Журнал оценок студентов</h2>
             <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '10px' }}>
                 <thead>
-                    <tr style={{ backgroundColor: 'var(--bg)' }}>
-                        <th>ID студента</th>
+                    <tr style={{ backgroundColor: '#f0f0f0' }}>
                         <th>ФИО</th>
                         <th>Средняя оценка</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {grades.length > 0 ? (
-                        grades.map(student => (
-                            <tr key={student.student_id} style={{ borderBottom: '1px solid #ddd' }}>
-                                <td>{student.student_id}</td>
-                                <td>{student.last_name} {student.first_name} {student.middle_name}</td>
+                    {students.map(student => (
+                        <React.Fragment key={student.student_id}>
+                            <tr
+                                onClick={() => toggleStudent(student.student_id)}
+                                style={{
+                                    cursor: 'pointer',
+                                    backgroundColor: expandedStudentId === student.student_id ? '#e6f7ff' : 'transparent'
+                                }}
+                            >
+                                <td>
+                                    {student.last_name} {student.first_name}
+                                    {student.middle_name && ` ${student.middle_name}`}
+                                </td>
                                 <td>
                                     {student.average_rating ? (
                                         <span style={{ fontWeight: 'bold', color: '#28a745' }}>
@@ -51,10 +57,43 @@ const GradesJournal = () => {
                                     )}
                                 </td>
                             </tr>
-                        ))
-                    ) : (
-                        <tr><td colSpan="3" style={{ textAlign: 'center' }}>Нет данных</td></tr>
-                    )}
+
+                            {/* Работы студента (если раскрыт) */}
+                            {expandedStudentId === student.student_id && (
+                                <tr>
+                                    <td colSpan="2" style={{ padding: '0' }}>
+                                        <div style={{ padding: '10px', borderLeft: '2px solid #ccc', marginLeft: '20px' }}>
+                                            {student.experiments.length > 0 ? (
+                                                student.experiments.map(exp => (
+                                                    <div
+                                                        key={exp.experiment_id}
+                                                        onClick={(e) => {
+                                                            e.stopPropagation(); // не закрывать родительский клик
+                                                            window.location.href = `/experiment/${exp.experiment_id}`;
+                                                        }}
+                                                        style={{
+                                                            padding: '8px',
+                                                            borderBottom: '1px solid #eee',
+                                                            cursor: 'pointer',
+                                                            display: 'flex',
+                                                            justifyContent: 'space-between'
+                                                        }}
+                                                    >
+                                                        <span>{exp.theme || 'Без темы'} ({new Date(exp.date_conducted).toLocaleDateString('ru-RU')})</span>
+                                                        <span style={{ fontWeight: 'bold', color: exp.rating ? '#28a745' : '#6c757d' }}>
+                                                            {exp.rating || '—'}
+                                                        </span>
+                                                    </div>
+                                                ))
+                                            ) : (
+                                                <p>Нет работ</p>
+                                            )}
+                                        </div>
+                                    </td>
+                                </tr>
+                            )}
+                        </React.Fragment>
+                    ))}
                 </tbody>
             </table>
         </div>

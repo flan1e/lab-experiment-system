@@ -45,7 +45,7 @@ exports.getStudentsGrades = async (req, res) => {
     }
 
     try {
-        const result = await db.query('SELECT * FROM get_students_grades()');
+        const result = await db.query('SELECT * FROM get_students_grades_detailed()');
         res.json(result.rows);
     } catch (err) {
         res.status(500).json({ msg: 'Ошибка сервера', error: err.message });
