@@ -1,23 +1,36 @@
-// client/src/pages/GradesJournal.jsx
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
 import apiCall from '../utils/api';
 
 const GradesJournal = () => {
     const [students, setStudents] = useState([]);
     const [expandedStudentId, setExpandedStudentId] = useState(null);
 
+    const [search, setSearch] = useState('');
+    const [minRating, setMinRating] = useState('');
+    const [maxRating, setMaxRating] = useState('');
+    const [sortBy, setSortBy] = useState('average_rating');
+    const [sortOrder, setSortOrder] = useState('DESC');
+
+    const fetchGrades = async () => {
+        try {
+            const params = new URLSearchParams();
+            if (search) params.append('search', search);
+            if (minRating) params.append('minRating', minRating);
+            if (maxRating) params.append('maxRating', maxRating);
+            params.append('sortBy', sortBy);
+            params.append('sortOrder', sortOrder);
+
+            const url = `/statistics/grades?${params.toString()}`;
+            const data = await apiCall(url);
+            setStudents(data);
+        } catch (err) {
+            alert('Ошибка загрузки журнала: ' + err.message);
+        }
+    };
+
     useEffect(() => {
-        const fetchGrades = async () => {
-            try {
-                const data = await apiCall('/statistics/grades');
-                setStudents(data);
-            } catch (err) {
-                alert('Ошибка загрузки журнала: ' + err.message);
-            }
-        };
         fetchGrades();
-    }, []);
+    }, [search, minRating, maxRating, sortBy, sortOrder]);
 
     const toggleStudent = (studentId) => {
         setExpandedStudentId(expandedStudentId === studentId ? null : studentId);
@@ -26,9 +39,51 @@ const GradesJournal = () => {
     return (
         <div style={{ padding: '20px' }}>
             <h2>Журнал оценок студентов</h2>
-            <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '10px' }}>
+
+            <div style={{ marginBottom: '20px', padding: '15px', backgroundColor: 'var(--bg)', borderRadius: '6px' }}>
+                <div style={{ display: 'flex', gap: '15px', flexWrap: 'wrap', alignItems: 'center'}}>
+                    <p>Фильтрация:</p>
+                    <input
+                        type="text"
+                        placeholder="Поиск по ФИО..."
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                        style={{ padding: '6px', width: '200px' }}
+                    />
+                    <input
+                        type="number"
+                        placeholder="Оценка от"
+                        min="1"
+                        max="5"
+                        value={minRating}
+                        onChange={(e) => setMinRating(e.target.value)}
+                        style={{ padding: '6px', width: '100px' }}
+                    />
+                    <input
+                        type="number"
+                        placeholder="Оценка до"
+                        min="1"
+                        max="5"
+                        value={maxRating}
+                        onChange={(e) => setMaxRating(e.target.value)}
+                        style={{ padding: '6px', width: '100px' }}
+                    />
+                    <p>Сортировка:</p>
+                    <select value={sortBy} onChange={(e) => setSortBy(e.target.value)} style={{background: 'var(--bg)', color: 'var(--color)'}}>
+                        <option value="average_rating">По оценке</option>
+                        <option value="last_name">По ФИО</option>
+                    </select>
+                    <select value={sortOrder} onChange={(e) => setSortOrder(e.target.value)} style={{background: 'var(--bg)', color: 'var(--color)'}}>
+                        <option value="DESC">↓</option>
+                        <option value="ASC">↑</option>
+                    </select>
+                    <button onClick={fetchGrades} style={{ padding: '6px 12px' }}>Применить</button>
+                </div>
+            </div>
+
+            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                 <thead>
-                    <tr style={{ backgroundColor: '#f0f0f0' }}>
+                    <tr style={{ backgroundColor: 'var(--bg)' }}>
                         <th>ФИО</th>
                         <th>Средняя оценка</th>
                     </tr>
@@ -40,7 +95,7 @@ const GradesJournal = () => {
                                 onClick={() => toggleStudent(student.student_id)}
                                 style={{
                                     cursor: 'pointer',
-                                    backgroundColor: expandedStudentId === student.student_id ? '#e6f7ff' : 'transparent'
+                                    backgroundColor: expandedStudentId === student.student_id ? 'var(--bg)' : 'transparent'
                                 }}
                             >
                                 <td>
@@ -48,7 +103,7 @@ const GradesJournal = () => {
                                     {student.middle_name && ` ${student.middle_name}`}
                                 </td>
                                 <td>
-                                    {student.average_rating ? (
+                                    {student.average_rating > 0 ? (
                                         <span style={{ fontWeight: 'bold', color: '#28a745' }}>
                                             {student.average_rating}
                                         </span>
@@ -58,7 +113,6 @@ const GradesJournal = () => {
                                 </td>
                             </tr>
 
-                            {/* Работы студента (если раскрыт) */}
                             {expandedStudentId === student.student_id && (
                                 <tr>
                                     <td colSpan="2" style={{ padding: '0' }}>
@@ -68,7 +122,7 @@ const GradesJournal = () => {
                                                     <div
                                                         key={exp.experiment_id}
                                                         onClick={(e) => {
-                                                            e.stopPropagation(); // не закрывать родительский клик
+                                                            e.stopPropagation();
                                                             window.location.href = `/experiment/${exp.experiment_id}`;
                                                         }}
                                                         style={{

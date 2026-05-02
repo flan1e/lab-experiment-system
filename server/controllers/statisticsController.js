@@ -44,10 +44,28 @@ exports.getStudentsGrades = async (req, res) => {
         return res.status(403).json({ msg: 'Доступ запрещён' });
     }
 
+    const {
+        search = '',
+        minRating,
+        maxRating,
+        sortBy = 'average_rating',
+        sortOrder = 'DESC'
+    } = req.query;
+
     try {
-        const result = await db.query('SELECT * FROM get_students_grades_detailed()');
+        const result = await db.query(
+            `SELECT * FROM get_students_grades_detailed($1, $2, $3, $4, $5)`,
+            [
+                search || null,
+                minRating ? parseFloat(minRating) : null,
+                maxRating ? parseFloat(maxRating) : null,
+                sortBy,
+                sortOrder.toUpperCase()
+            ]
+        );
         res.json(result.rows);
     } catch (err) {
+        console.error('Ошибка в getStudentsGrades:', err.message);
         res.status(500).json({ msg: 'Ошибка сервера', error: err.message });
     }
 };
