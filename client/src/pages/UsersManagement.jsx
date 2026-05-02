@@ -58,30 +58,30 @@ const UsersManagement = () => {
                 ← Назад
             </button>
 
-            <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '10px' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '10px', border: "1px solid #ddd" }}>
                 <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Логин</th>
-                        <th>ФИО</th>
-                        <th>Роль</th>
-                        <th>Статус</th>
-                        <th>Действия</th>
+                    <tr style={{border: "1px solid #ddd"}}>
+                        <th style={{border: "1px solid #ddd"}}>ID</th>
+                        <th style={{border: "1px solid #ddd"}}>Логин</th>
+                        <th style={{border: "1px solid #ddd"}}>ФИО</th>
+                        <th style={{border: "1px solid #ddd"}}>Роль</th>
+                        <th style={{border: "1px solid #ddd"}}>Статус</th>
+                        <th style={{border: "1px solid #ddd"}}>Действия</th>
                     </tr>
                 </thead>
                 <tbody>
                     {users.map(user => (
                         <tr key={user.user_id} style={{ borderBottom: '1px solid #ddd' }}>
-                            <td>{user.user_id}</td>
-                            <td>{user.username}</td>
-                            <td>{user.last_name} {user.first_name} {user.middle_name}</td>
-                            <td>{user.role_name}</td>
-                            <td>
+                            <td style={{border: "1px solid #ddd"}}>{user.user_id}</td>
+                            <td style={{border: "1px solid #ddd"}}>{user.username}</td>
+                            <td style={{border: "1px solid #ddd"}}>{user.last_name} {user.first_name} {user.middle_name}</td>
+                            <td style={{border: "1px solid #ddd"}}>{user.role_name}</td>
+                            <td style={{border: "1px solid #ddd"}}>
                                 <span style={{ color: user.is_active ? 'green' : 'red' }}>
                                     {user.is_active ? 'Активен' : 'Неактивен'}
                                 </span>
                             </td>
-                            <td>
+                            <td style={{border: "1px solid #ddd"}}>
                                 <button
                                     onClick={() => handleEdit(user)}
                                     style={{ marginRight: '5px', padding: '2px 6px' }}

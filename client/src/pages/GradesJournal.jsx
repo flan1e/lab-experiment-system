@@ -81,9 +81,9 @@ const GradesJournal = () => {
                 </div>
             </div>
 
-            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', border: "1px solid #ddd" }}>
                 <thead>
-                    <tr style={{ backgroundColor: 'var(--bg)' }}>
+                    <tr style={{ backgroundColor: 'var(--bg)', border: "1px solid #ddd" }}>
                         <th>ФИО</th>
                         <th>Средняя оценка</th>
                     </tr>
@@ -95,14 +95,15 @@ const GradesJournal = () => {
                                 onClick={() => toggleStudent(student.student_id)}
                                 style={{
                                     cursor: 'pointer',
+                                    border: "1px solid #ddd",
                                     backgroundColor: expandedStudentId === student.student_id ? 'var(--bg)' : 'transparent'
                                 }}
                             >
-                                <td>
+                                <td style={{border: "1px solid #ddd"}}>
                                     {student.last_name} {student.first_name}
                                     {student.middle_name && ` ${student.middle_name}`}
                                 </td>
-                                <td>
+                                <td style={{border: "1px solid #ddd"}}>
                                     {student.average_rating > 0 ? (
                                         <span style={{ fontWeight: 'bold', color: '#28a745' }}>
                                             {student.average_rating}
@@ -114,9 +115,9 @@ const GradesJournal = () => {
                             </tr>
 
                             {expandedStudentId === student.student_id && (
-                                <tr>
-                                    <td colSpan="2" style={{ padding: '0' }}>
-                                        <div style={{ padding: '10px', borderLeft: '2px solid #ccc', marginLeft: '20px' }}>
+                                <tr style={{border: "1px solid #ddd"}}>
+                                    <td colSpan="2" style={{ padding: '0', border: "1px solid #ddd" }}>
+                                        <div style={{ padding: '10px', borderLeft: '2px solid #ccc', marginLeft: '20px', border: "1px solid #ddd" }}>
                                             {student.experiments.length > 0 ? (
                                                 student.experiments.map(exp => (
                                                     <div

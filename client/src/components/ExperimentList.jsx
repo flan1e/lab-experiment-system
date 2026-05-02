@@ -1,162 +1,135 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import apiCall from '../utils/api';
-import '../components/experimentList.css';
-import { useContext } from 'react';
-import { createContext } from 'react';
 
 const ExperimentList = ({ onRefresh, user }) => {
     const [experiments, setExperiments] = useState([]);
     const [loading, setLoading] = useState(true);
-    
+
 
     const [filters, setFilters] = useState({
-        user_id: '',
+        user_search: '',
         date_from: '',
         date_to: '',
-        reagent_id: ''
+        reagent_id: '',
+        unrated_only: false
     });
 
-    const fetchExperiments = async () => {
+    const fetchExperiments = useCallback(async () => {
         setLoading(true);
         try {
             const params = new URLSearchParams();
-            if (filters.user_id) params.append('user_id', filters.user_id);
+            if (filters.user_search) params.append('user_search', filters.user_search);
             if (filters.date_from) params.append('date_from', filters.date_from);
             if (filters.date_to) params.append('date_to', filters.date_to);
             if (filters.reagent_id) params.append('reagent_id', filters.reagent_id);
+            if (filters.unrated_only) params.append('unrated_only', 'true');
 
-            const url = `/experiments${params.toString() ? '?' + params.toString() : ''}`;
-            const data = await apiCall(url);
+            const data = await apiCall(`/experiments?${params.toString()}`);
             setExperiments(data);
         } catch (err) {
             alert('Ошибка загрузки экспериментов');
         } finally {
             setLoading(false);
         }
-    };
+    }, [filters]);
 
     useEffect(() => {
         fetchExperiments();
-    }, []);
+        if (onRefresh) onRefresh.current = fetchExperiments;
+    }, [fetchExperiments, onRefresh]);
 
-    const handleFilterChange = (e) => {
-        const { name, value } = e.target;
-        setFilters(prev => ({ ...prev, [name]: value }));
+    const handleFilterChange = (key, value) => {
+        setFilters(prev => ({ ...prev, [key]: value }));
     };
 
-    const handleFilterSubmit = (e) => {
-        e.preventDefault();
-        fetchExperiments();
+    const truncateText = (text, maxLength = 100) => {
+        if (!text) return '';
+        return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
     };
-
-    const handleClearFilters = () => {
-        setFilters({ user_id: '', date_from: '', date_to: '', reagent_id: '' });
-        setLoading(true);
-        apiCall('/experiments')
-            .then(data => setExperiments(data))
-            .catch(() => alert('Ошибка загрузки'))
-            .finally(() => setLoading(false));
-    };
-
-    if (onRefresh) {
-        onRefresh.current = fetchExperiments;
-    }
-
-    if (loading) return <p>Загрузка...</p>;
 
     return (
-        <div className='experimentList_all'>
+        <div style={{ marginTop: '30px' }}>
             <h2>Список экспериментов</h2>
-            <form className='experimentList_validation_form' onSubmit={handleFilterSubmit}>
-                <h3>Фильтрация</h3>
-                <div style={{ display: 'flex', gap: '15px', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-evenly' }}>
-                    <div>
-                        <label>Пользователь (ID): </label>
+
+            <div style={{ marginBottom: '20px', padding: '15px', backgroundColor: '#f8f9fa', borderRadius: '6px' }}>
+                <div style={{ display: 'flex', gap: '15px', flexWrap: 'wrap', alignItems: 'center' }}>
+                    <input
+                        type="text"
+                        placeholder="Поиск по ФИО или ID студента..."
+                        value={filters.user_search}
+                        onChange={(e) => handleFilterChange('user_search', e.target.value)}
+                        style={{ padding: '6px', width: '200px' }}
+                    />
+                    <input
+                        type="date"
+                        value={filters.date_from}
+                        onChange={(e) => handleFilterChange('date_from', e.target.value)}
+                        style={{ padding: '6px' }}
+                    />
+                    <input
+                        type="date"
+                        value={filters.date_to}
+                        onChange={(e) => handleFilterChange('date_to', e.target.value)}
+                        style={{ padding: '6px' }}
+                    />
+                    <input
+                        type="number"
+                        placeholder="ID реагента"
+                        value={filters.reagent_id}
+                        onChange={(e) => handleFilterChange('reagent_id', e.target.value)}
+                        style={{ padding: '6px', width: '120px' }}
+                    />
+                    <label>
                         <input
-                            type="number"
-                            name="user_id"
-                            value={filters.user_id}
-                            onChange={handleFilterChange}
-                            placeholder="1"
-                            min="1"
-                            style={{ width: '80px' }}
+                            type="checkbox"
+                            checked={filters.unrated_only}
+                            onChange={(e) => handleFilterChange('unrated_only', e.target.checked)}
                         />
-                    </div>
-                    <div>
-                        <label>Дата с: </label>
-                        <input
-                            type="date"
-                            name="date_from"
-                            value={filters.date_from}
-                            onChange={handleFilterChange}
-                        />
-                    </div>
-                    <div>
-                        <label>Дата по: </label>
-                        <input
-                            type="date"
-                            name="date_to"
-                            value={filters.date_to}
-                            onChange={handleFilterChange}
-                        />
-                    </div>
-                    <div>
-                        <label>Реагент (ID): </label>
-                        <input
-                            type="number"
-                            name="reagent_id"
-                            value={filters.reagent_id}
-                            onChange={handleFilterChange}
-                            placeholder="3"
-                            min="1"
-                            style={{ width: '80px' }}
-                        />
-                    </div>
-                    <div>
-                        <button type="submit">Применить</button>
-                        <button type="button" onClick={handleClearFilters} style={{ marginLeft: '10px' }}>
-                            Сбросить
-                        </button>
-                    </div>
+                        Только неоценённые
+                    </label>
+                    <button onClick={fetchExperiments} style={{ padding: '6px 12px' }}>
+                        Применить
+                    </button>
                 </div>
-            </form>
+            </div>
 
-            <table className='experimentList_table'>
-                <thead className='experimentList_table_legend'>
-                    <tr>
-                        <th>ID</th>
-                        <th>Дата</th>
-                        <th>Описание</th>
-                        <th>Наблюдения</th> 
-                        <th>Провёл</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {experiments.map(exp => {
-                        // if (!user) return null;
-                        const canView = user.role === 'student' ? (exp.user_id == user.id) : true;
-                        return (
-                            <tr 
-                                key={exp.experiment_id} 
-                                onClick={() => canView && (window.location.href = `/experiment/${exp.experiment_id}`)}
-                                style={{ 
-                                    cursor: canView ? 'pointer' : 'not-allowed',
-                                    opacity: canView ? 1 : 0.5 
-                                }}
-                            >
-                                <td className='experiment_id'>{exp.experiment_id}</td>
-                                <td>{new Date(exp.date_conducted).toLocaleDateString('ru-RU')}</td>
-                                <td>{exp.description}</td>
-                                <td>{exp.observations}</td> 
-                                <td className='experiment_name'>{exp.last_name} {exp.first_name}{exp.middle_name && ` ${exp.middle_name}`}</td>
-                            </tr>
-                        );
-                    })}
-                </tbody>
-            </table>
+            {loading ? (
+                <p>Загрузка...</p>
+            ) : experiments.length === 0 ? (
+                <p>Нет экспериментов</p>
+            ) : (
+                experiments.map(exp => (
+                    <div key={exp.experiment_id} style={{
+                        border: '1px solid #ddd',
+                        borderRadius: '6px',
+                        padding: '15px',
+                        marginBottom: '15px'
+                    }}>
+                        <Link to={`/experiment/${exp.experiment_id}`} style={{ textDecoration: 'none', color: '#007bff' }}>
+                            <h3>{exp.theme || 'Без темы'}</h3>
+                        </Link>
+                        <p><strong>Дата:</strong> {new Date(exp.date_conducted).toLocaleDateString('ru-RU')}</p>
+                        <p><strong>Автор:</strong> {exp.last_name} {exp.first_name} {exp.middle_name} (ID: {exp.user_id})</p>
+                        
 
-            {experiments.length === 0 && <p>Нет экспериментов</p>}
+                        <p><strong>Описание:</strong> {truncateText(exp.description)}</p>
+                        <p><strong>Наблюдения:</strong> {truncateText(exp.observations)}</p>
+
+                        {!exp.has_review && user.role !== 'student' && (
+                            <span style={{ 
+                                background: '#fff8e1', 
+                                color: '#ff9800', 
+                                padding: '2px 6px', 
+                                borderRadius: '4px',
+                                fontSize: '0.9em'
+                            }}>
+                                ⚠️ Не оценено
+                            </span>
+                        )}
+                    </div>
+                ))
+            )}
         </div>
     );
 };

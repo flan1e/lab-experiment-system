@@ -117,32 +117,32 @@ const AuditLog = () => {
                 </div>
             </form>
 
-            <table style={{margin: '0 auto', borderCollapse: 'collapse' }}>
-                <thead>
+            <table style={{margin: '0 auto', borderCollapse: 'collapse', border: "1px solid #ddd", width: '90%' }}>
+                <thead style={{border: "1px solid #ddd"}}>
                     <tr>
-                        <th>Время</th>
-                        <th>Операция</th>
-                        <th>Таблица</th>
-                        <th>Запись ID</th>
-                        <th>Пользователь</th>
+                        <th style={{border: "1px solid #ddd"}}>Время</th>
+                        <th style={{border: "1px solid #ddd"}}>Операция</th>
+                        <th style={{border: "1px solid #ddd"}}>Таблица</th>
+                        <th style={{border: "1px solid #ddd"}}>Запись ID</th>
+                        <th style={{border: "1px solid #ddd"}}>Пользователь</th>
                     </tr>
                 </thead>
                 <tbody>
                     {logs.map(log => (
                         <tr key={log.log_id} style={{ borderBottom: '1px solid #ddd' }}>
-                            <td>{new Date(log.timestamp).toLocaleString('ru-RU')}</td>
-                            <td>
+                            <td style={{border: "1px solid #ddd"}}>{new Date(log.timestamp).toLocaleString('ru-RU')}</td>
+                            <td style={{border: "1px solid #ddd"}}>
                                 <span style={{
                                     color: log.operation.includes('INSERT') ? 'green' :
                                            log.operation.includes('UPDATE') ? 'blue' :
-                                           log.operation.includes('DELETE') ? 'red' : 'black'
+                                           log.operation.includes('DELETE') ? 'red' : 'orange'
                                 }}>
                                     {log.operation}
                                 </span>
                             </td>
-                            <td>{log.table_name}</td>
-                            <td>{log.record_id}</td>
-                            <td>{log.full_name || log.username || '—'}</td>
+                            <td style={{border: "1px solid #ddd"}}>{log.table_name}</td>
+                            <td style={{border: "1px solid #ddd"}}>{log.record_id}</td>
+                            <td style={{border: "1px solid #ddd"}}>{log.full_name || log.username || '—'}</td>
                         </tr>
                     ))}
                 </tbody>

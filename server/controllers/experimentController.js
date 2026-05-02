@@ -41,18 +41,38 @@ exports.addExperiment = async (req, res) => {
 };
 
 exports.getExperiments = async (req, res) => {
-    const { user_id, date_from, date_to, reagent_id } = req.query;
-    // console.log(req.query.date_from);
-    // console.log(date_to);
+    const { 
+        user_id, 
+        date_from, 
+        date_to, 
+        reagent_id,
+        unrated_only,
+        user_search
+    } = req.query;
 
+    const currentUserId = req.user.id;
+    const currentUserRole = req.user.role;
 
     try {
+        let filterUserId = user_id || null;
+        if (currentUserRole === 'student') {
+            filterUserId = currentUserId;
+        }
+
         const result = await db.query(
-            'SELECT * FROM get_experiments($1::INTEGER, $2::DATE, $3::DATE, $4::INTEGER) ORDER BY experiment_id DESC',
-            [user_id || null, date_from || null, date_to || null, reagent_id || null]
+            `SELECT * FROM get_experiments($1, $2, $3, $4, $5, $6)`,
+            [
+                filterUserId,
+                date_from || null,
+                date_to || null,
+                reagent_id ? parseInt(reagent_id) : null,
+                unrated_only === 'true',
+                user_search || null
+            ]
         );
         res.json(result.rows);
     } catch (err) {
+        console.error('Ошибка getExperiments:', err.message);
         res.status(500).json({ msg: 'Ошибка сервера', error: err.message });
     }
 };
