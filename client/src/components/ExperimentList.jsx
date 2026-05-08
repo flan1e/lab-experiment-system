@@ -52,7 +52,7 @@ const ExperimentList = ({ onRefresh, user }) => {
         <div style={{ marginTop: '30px' }}>
             <h2>Список экспериментов</h2>
 
-            <div style={{ marginBottom: '20px', padding: '15px', backgroundColor: '#f8f9fa', borderRadius: '6px' }}>
+            <div style={{ marginBottom: '20px', padding: '15px', backgroundColor: 'var(--bg)', borderRadius: '6px' }}>
                 <div style={{ display: 'flex', gap: '15px', flexWrap: 'wrap', alignItems: 'center' }}>
                     <input
                         type="text"
@@ -118,7 +118,7 @@ const ExperimentList = ({ onRefresh, user }) => {
 
                         {!exp.has_review && user.role !== 'student' && (
                             <span style={{ 
-                                background: '#fff8e1', 
+                                background: 'var(--bg)', 
                                 color: '#ff9800', 
                                 padding: '2px 6px', 
                                 borderRadius: '4px',
